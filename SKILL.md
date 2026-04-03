@@ -1,80 +1,43 @@
 ---
 name: ascii-skill
-description: Add beautiful, theme-aware, mouse-reactive ASCII art layers to web UIs ($ascii). Use when the user asks for ASCII decoration, terminal aesthetic, reactive backgrounds, hero treatments, or subtle bento/card backdrops. Ships a small canvas runtime plus layout roles (hero, feature, ambient).
+description: Guide for $ascii — YOU generate original, site-specific ASCII decoration (frames, banners, grids, shading, wordmarks). Use when the user wants ASCII art, terminal aesthetic, monochrome diagrams, or typographic texture. Optional tiny canvas helper in assets/ only if a live mouse-reactive field fits the design; do not default to it or reuse the same pattern everywhere.
 ---
 
-# ASCII skill
+# ASCII skill ($ascii)
 
-When the user invokes **$ascii** (or asks for ASCII / monospace reactive visuals), add a **canvas-driven ASCII field** that respects site theme and layout context.
+This skill is **not** a library of ready-made ASCII clips. **You create new ASCII** for each surface: shapes, borders, fills, and micro-patterns that fit the **product name, metaphor, layout role, and theme** of the current site or component.
 
-## Workflow
+## Default workflow (always)
 
-1. **Classify the surface**
-   - **Hero / main focal UI** → `data-ascii-role="hero"` — dense interaction, faster drift, optional 3D tilt (default on).
-   - **Supporting section / CTA block** → `data-ascii-role="feature"`.
-   - **Bento tile, card BG, quiet panel** → `data-ascii-role="ambient"` — small cells, low opacity, set `data-ascii-3d="false"` and lower `--ascii-opacity` (e.g. `0.12–0.28`).
+1. **Infer context** — Brand voice (playful vs serious), color mode, monospace vs pixel font if any, and the **layout role**:
+   - **Hero / main stage** — larger glyphs, richer composition (multi-line banner, corner flourishes, framed rectangle), maybe implied depth (layered densities). Still readable at a glance.
+   - **Feature / section** — medium scale: dividers, section headers in ASCII, one strong motif.
+   - **Ambient / card / bento bg** — sparse dotted grids, light hashes, tiny waves, low visual weight; must not compete with text.
 
-2. **Wire assets**
-   - Copy `assets/ascii-skill.js` into the project (or reference raw URL from the published repo).
-   - Ensure the host page runs `AsciiSkill.initAll()` on `DOMContentLoaded` (or instantiate manually in SPA lifecycle).
+2. **Invent the piece** — Choose a **fresh** structure every time. Examples of *categories* (not templates to copy verbatim):
+   - Box frames: `─ │ ┌ ┐ └ ┘` or `═ ║ ╔ ╗ ╚ ╝` or mixed weights for emphasis.
+   - Shading ramps: ` · ·░▒▓` or ` .:-=+*#%@` — pick length and mood to match UI.
+   - Word-sized “logotype” blocks: hand-draw 3–6 line ASCII for a short word or acronym **for this project**.
+   - Decorative rules, chevrons, waves `∿`, brackets `⟨ ⟩`, circuit-ish paths, etc., aligned to narrative.
 
-3. **Container rules**
-   - Wrapper must have dimensions (`min-height` for heroes). The script sets `position: relative` and `overflow: hidden` if needed.
-   - Layer real content **above** the field (the canvas is inserted as the first child with `pointer-events: none`).
+3. **Implement** — Usually `<pre>` with `font-family: ui-monospace` (or the site’s mono), `white-space: pre`, line-height ~1, color from tokens (`color-mix`, `opacity`). Layer behind real content with `position`/`z-index` or grid stacking. **Preserve alignment**: every line same width where the design requires a rectangle.
 
-4. **Theme**
-   - Prefer inheriting colors: set `--ascii-fg`, `--ascii-accent`, `--ascii-bg`, `--ascii-opacity`, `--ascii-font` on the same element that carries `data-ascii-skill`. If omitted, foreground/color from computed styles is used.
+4. **Accessibility & motion** — Prefer static ASCII unless the user wants movement. If animating (rotating frame, typing effect), respect `prefers-reduced-motion`. Never block reading with busy backgrounds.
 
-5. **Optional frame**
-   - For heroes, surround inner content with an ASCII box border (`─│┌┐└┘`) or a `<pre>` frame; keep tagline/copy in a corner with normal body typography.
+5. **Do not** — Paste identical art from another project, spam huge FIGlet dumps without layout purpose, or slap the optional canvas on every card “because the skill exists.”
 
-## Snippet — static page
+Deep catalogs of charsets, roles, and implementation notes: `references/patterns.md`.
 
-```html
-<link rel="stylesheet" href="/your-styles.css" />
-<script src="/assets/ascii-skill.js" defer></script>
-<script defer>
-  document.addEventListener("DOMContentLoaded", function () {
-    AsciiSkill.initAll();
-  });
-</script>
+---
 
-<section
-  class="hero ascii-themed"
-  data-ascii-skill
-  data-ascii-role="hero"
-  style="min-height: 78vh;"
->
-  <!-- foreground content -->
-</section>
-```
+## Optional: live mouse-reactive field (`assets/ascii-skill.js`)
 
-## Snippet — ambient card
+Use **only** when a **fluid, cursor-reactive** ASCII *field* (not a fixed `<pre>`) genuinely matches the design—e.g. hero atmosphere or a single feature panel.
 
-```html
-<div
-  class="bento-tile"
-  data-ascii-skill
-  data-ascii-role="ambient"
-  data-ascii-3d="false"
-  data-ascii-cell-size="6"
-  style="min-height: 220px; --ascii-opacity: 0.2;"
->
-  <div style="position: relative; z-index: 1">…copy…</div>
-</div>
-```
+- Copy `assets/ascii-skill.js`, add `data-ascii-skill`, call `AsciiSkill.initAll()` after load (see `references/patterns.md`).
+- Still set **custom** CSS variables on the host so the field matches **this** theme.
+- **Ambient** tiles: `data-ascii-role="ambient"`, low `--ascii-opacity`, `data-ascii-3d="false"`.
 
-## API (manual control)
-
-- `new AsciiSkill(element, { role, cellSize, followMouse, perspective3d })`
-- `instance.destroy()` on teardown.
-
-Details and layout table: see `references/patterns.md`.
-
-## Quality bar
-
-- Match site palette; never clash with WCAG contrast for overlaid text.
-- Respect `prefers-reduced-motion` in host CSS: e.g. disable 3D or hide field with `@media (prefers-reduced-motion: reduce) { [data-ascii-skill] { display: none } }` — only if product policy requires it; otherwise reduce opacity and skip 3D via attribute.
-- Keep one primary `hero` ASCII per viewport; unlimited `ambient` tiles.
+The script does **not** replace authoring; it’s one technique for motion + density. Static bespoke ASCII is often the right answer.
 
 Repository: https://github.com/arjunkshah/ascii-skill

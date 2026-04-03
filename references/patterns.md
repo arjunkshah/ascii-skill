@@ -1,54 +1,63 @@
-# ASCII skill — layout patterns
+# ASCII skill — authoring reference
 
-Use these names in markup and when describing intent to the user.
+Use this when you need ideas or technical guardrails while **generating new** ASCII for the task at hand.
 
-## Roles
+## Layout roles (calibrate complexity)
 
-| Role | When | Behavior |
-|------|------|----------|
-| `hero` | Primary full-bleed hero, main stage | Larger cells, strong mouse glow, optional 3D tilt (`perspective3d`), higher motion speed |
-| `feature` | Section highlight, callouts, device frames | Medium density, moderate glow and tilt |
-| `ambient` | Bento tiles, card backgrounds, side rails | Small cells, low `--ascii-opacity`, minimal parallax, **no** 3D |
+| Role | Density | Typical forms |
+|------|--------|----------------|
+| Hero | High | Multi-line frame, corner accents, optional large word block, inner copy in normal type |
+| Feature | Medium | Section underline, left rail, device “bezel” in ASCII, short banner |
+| Ambient | Low | Sparse dots, faint diagonal hashes, tiny repeating motif, wide line spacing |
 
-## Required container CSS
+## Tooling (pick per project)
 
-- `position: relative` (the script will set this if still `static`)
-- Explicit height for heroes (e.g. `min-height: 70vh`)
-- Optional theme hooks on the same element:
+- **Charset** — Match tone: minimal ` .-` for calm; technical `├─┤` trees; bold `$#@&` for grit. Combine with the site’s accent (e.g. rare `*·` for sparkle).
+- **Box styles light** — `─│┌┐└┘ ├┤┬┴┼` (Unicode light box drawing).
+- **Box styles heavy** — `═║╔╗╚╝` for emphasis borders.
+- **Shading** — Ordered ramps give predictable “light direction”: e.g. ` .'` or `░▒▓` or block elements.
+- **Symmetry** — Centered rules and mirrored wings read as intentional; asymmetric breaks draw the eye to CTA side.
 
-```css.example
-.my-ascii-zone {
-  --ascii-fg: color-mix(in oklab, var(--foreground) 75%, transparent);
-  --ascii-accent: var(--accent, #7ee787);
-  --ascii-bg: transparent;
-  --ascii-opacity: 0.85;
-  --ascii-font: ui-monospace, "Geist Mono", monospace;
-}
-.ascii-ambient {
-  --ascii-opacity: 0.18;
-}
-```
+## Implementation
 
-## Markup (auto-init)
+- **`<pre>`** — Best for fixed art; set exact `font-family` stack and `font-size`; avoid accidental proportional fonts.
+- **Overflow** — `overflow-x: auto` on narrow viewports; consider `@media` to simplify or hide ornate frames on small screens.
+- **Color** — Tie to CSS vars: `color: color-mix(in oklab, var(--foreground) 55%, transparent);` for quiet fills.
+
+## Generative mindset (examples are *patterns*, not assets)
+
+Illustrate **structure**, not copy these strings into every app:
+
+- **Wave row** — vary phase per line: mix `~` `-` `.` with spaces for rhythm.
+- **Corner brackets** — `╭` `╮` `╰` `╯` if available; fallback ASCII `+` corners in strict mono environments.
+- **Grid** — `+---+` repeat vs spaced `·` for a field.
+
+Each build should reference **this** page’s typography scale and **this** brand’s name or metaphor at least once where it feels natural.
+
+---
+
+## Optional canvas helper (`ascii-skill.js`)
+
+When you choose a **live** field instead of or behind static art:
+
+| Attribute | Meaning |
+|-----------|---------|
+| `data-ascii-skill` | Activate on this container |
+| `data-ascii-role` | `hero` \| `feature` \| `ambient` |
+| `data-ascii-cell-size` | Optional number |
+| `data-ascii-3d="false"` | Disable tilt (use on ambient) |
+
+Theme hooks on the same element: `--ascii-fg`, `--ascii-accent`, `--ascii-opacity`, `--ascii-font`.
+
+Init:
 
 ```html
-<script src="path/to/ascii-skill.js" defer></script>
-<script defer>document.addEventListener('DOMContentLoaded', () => AsciiSkill.initAll());</script>
-
-<div data-ascii-skill data-ascii-role="hero" style="min-height:72vh"></div>
-<div data-ascii-skill data-ascii-role="ambient" data-ascii-3d="false" class="card-bg"></div>
+<script src="./assets/ascii-skill.js" defer></script>
+<script defer>
+  document.addEventListener("DOMContentLoaded", () => AsciiSkill.initAll());
+</script>
 ```
 
-## Programmatic placement (React / Vue / etc.)
+Programmatic: `new AsciiSkill(el, { role: 'feature' });` then `destroy()` on unmount.
 
-Mount after the container ref exists; call `destroy()` on unmount.
-
-```javascript
-const el = containerRef.current;
-const skill = new AsciiSkill(el, { role: 'feature', cellSize: 10 });
-return () => skill.destroy();
-```
-
-## Decorative frame (ASCII border)
-
-Wrap content in a `<pre class="ascii-frame">` or draw a single-line border with box-drawing chars (`─│┌┐└┘`) proportional to width using a tiny script or server render. Keeps the inner zone clean for text while the field fills the inside rectangle.
+**Remember:** authored `<pre>` art is independent of this file; most UIs only need what you typed.

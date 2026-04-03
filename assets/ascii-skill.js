@@ -1,5 +1,6 @@
 /**
- * ascii-skill — theme-aware, mouse-reactive ASCII fields for the web.
+ * Optional helper for ascii-skill: live, mouse-reactive ASCII *fields* on canvas.
+ * The agent skill expects you to author bespoke <pre> art first; use this only when motion fits.
  * License: MIT (same as repository)
  */
 (function (global) {

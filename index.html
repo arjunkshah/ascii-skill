@@ -6,7 +6,7 @@
     <title>ascii-skill — $ascii for coding agents</title>
     <meta
       name="description"
-      content="Agent skill + drop-in script for beautiful, theme-aware, mouse-reactive ASCII layers on the web."
+      content="Agent skill: generate site-specific ASCII art (frames, banners, texture). Optional small canvas helper for mouse-reactive fields."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -519,10 +519,11 @@
             data-ascii-cell-size="12"
           ></div>
           <div class="hero-tag">
-            <h1 class="font-pixel">ASCII that feels alive</h1>
+            <h1 class="font-pixel">You invent the ASCII</h1>
             <p>
-              Drop-in skill for Codex, Claude Code, and friends: mouse-reactive fields that match your theme—bold for
-              heroes, whisper-quiet for bento.
+              $ascii tells coding agents to <strong>author new</strong> borders, shading, and banners for each UI—hero,
+              feature, or whisper-quiet bento—matched to the real theme. Optional runtime below is only for when motion
+              fits.
             </p>
           </div>
         </div>
@@ -530,9 +531,13 @@
 
       <section class="section wrap">
         <h2 class="section-title font-pixel">Before / after</h2>
+        <p class="section-lede" style="margin: -0.5rem 0 1.25rem; max-width: 720px; color: var(--muted); font-size: 1rem">
+          Sliders compare plain surfaces with the <strong>optional</strong> reactive field. In production, agents still
+          type bespoke <code>&lt;pre&gt;</code> art; the script is one technique—not the skill’s default.
+        </p>
         <div class="compare-row">
           <article class="compare-card">
-            <header><span>Hero energy</span><span class="font-pixel">A/B</span></header>
+            <header><span>Hero motion (optional)</span><span class="font-pixel">A/B</span></header>
             <div class="compare-viewport" id="cmpHero">
               <div class="demo-surface plain" data-layer="off">
                 <div class="demo-copy"><strong>Flat gradient</strong> — fine, but quiet.</div>
@@ -551,7 +556,7 @@
                   data-ascii-cell-size="10"
                 ></div>
                 <div class="demo-copy" style="position: relative; z-index: 1">
-                  <strong>$ascii hero</strong> — glow + tilt follows your cursor.
+                  <strong>Optional field</strong> — agent-authored layers stay static; this adds cursor bias + light tilt.
                 </div>
               </div>
             </div>
@@ -593,24 +598,27 @@
         <h2 class="section-title font-pixel">Bento kitchen sink</h2>
         <div class="bento">
           <div class="cell ambient-zone" data-ascii-skill data-ascii-role="ambient" data-ascii-3d="false" data-ascii-cell-size="7">
-            <h3 class="font-pixel">Ambient</h3>
-            <p>Low-opacity field for cards and rails.</p>
+            <h3 class="font-pixel">Bespoke first</h3>
+            <p>Agents draw new grids, frames, and ramps per brand—no clip-art library.</p>
           </div>
           <div class="cell ambient-zone" data-ascii-skill data-ascii-role="ambient" data-ascii-3d="false" data-ascii-cell-size="7">
-            <h3 class="font-pixel">Theme hooks</h3>
-            <p>CSS vars: --ascii-fg, --ascii-accent, --ascii-opacity.</p>
+            <h3 class="font-pixel">Role aware</h3>
+            <p>Hero vs feature vs bento: SKILL.md sets complexity and density expectations.</p>
           </div>
           <div class="cell ambient-zone" data-ascii-skill data-ascii-role="ambient" data-ascii-3d="false" data-ascii-cell-size="7">
-            <h3 class="font-pixel">Pointer safe</h3>
-            <p>Canvas ignores hits; stack real UI above.</p>
+            <h3 class="font-pixel">Motion optional</h3>
+            <p>Static <code>&lt;pre&gt;</code> is the norm; canvas only when motion earns it.</p>
           </div>
           <div class="cell bottom-left">
-            <h3 class="font-pixel">Docs</h3>
-            <p>Agents read SKILL.md; humans skim this page.</p>
+            <h3 class="font-pixel">Patterns ref</h3>
+            <p><code>references/patterns.md</code> — charsets &amp; roles, not ready-made art.</p>
           </div>
           <div class="cell wide feature-zone-mini" data-ascii-skill data-ascii-role="feature" data-ascii-cell-size="9">
-            <h3 class="font-pixel">Feature band</h3>
-            <p>Medium density for promos, device frames, or mid-page heroes—not as loud as main stage, stronger than ambient.</p>
+            <h3 class="font-pixel">Optional runner</h3>
+            <p>
+              <code>ascii-skill.js</code> is a small helper for reactive fields. It never replaces designing ASCII for the
+              actual interface.
+            </p>
           </div>
         </div>
       </section>
@@ -621,30 +629,30 @@
           <div class="step">
             <div class="step-num">1</div>
             <div>
-              <h4 class="font-pixel">Context pick</h4>
+              <h4 class="font-pixel">Read the surface</h4>
               <p>
-                Classify the surface: <strong>hero</strong> for focal UI, <strong>feature</strong> for supportive blocks,
-                <strong>ambient</strong> for bento backgrounds.
+                Decide <strong>hero</strong>, <strong>feature</strong>, or <strong>ambient</strong>, then sketch <em>new</em>
+                ASCII—frames, shading, word blocks—that fits this product’s theme and layout.
               </p>
             </div>
           </div>
           <div class="step">
             <div class="step-num">2</div>
             <div>
-              <h4 class="font-pixel">Drop the script</h4>
+              <h4 class="font-pixel">Ship as markup</h4>
               <p>
-                Add <code>assets/ascii-skill.js</code>, mark containers with <code>data-ascii-skill</code>, and call
-                <code>AsciiSkill.initAll()</code> after load (or wire manually in your framework).
+                Encode it in <code>&lt;pre&gt;</code> / CSS stacks; tune mono font, color tokens, and contrast. Resize or simplify
+                ornate frames on small screens if needed.
               </p>
             </div>
           </div>
           <div class="step">
             <div class="step-num">3</div>
             <div>
-              <h4 class="font-pixel">Theme + motion</h4>
+              <h4 class="font-pixel">Add motion only if it fits</h4>
               <p>
-                Colors inherit from CSS variables on the same node. Mouse input biases brightness; hero/feature tilt uses light 3D
-                perspective on the canvas for depth without hurting readability.
+                When a live field helps, pull in <code>ascii-skill.js</code>, scope it to one region, and theme it with CSS
+                variables—still layered under real content.
               </p>
             </div>
           </div>
@@ -653,10 +661,10 @@
 
       <section class="wrap">
         <div class="cta">
-          <h2 class="font-pixel">Ship ASCII with confidence</h2>
+          <h2 class="font-pixel">Skill for agents, art from you</h2>
           <p>
-            Install the agent skill from the repo, copy the runtime into your app, and let $ascii handle the expressive layers while
-            you keep components clean.
+            Install the skill so models reach for <strong>original</strong> ASCII workflows. The helper script stays in
+            <code>assets/</code> for the rare case you want pointer-driven texture—not as a default decoration pack.
           </p>
           <div class="cta-actions">
             <a class="btn btn-primary" href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer"
@@ -751,16 +759,18 @@
           setupCompare("cmpAmbient", "sliderAmbient");
 
           var raw =
-            "# Clone the skill + site\n" +
+            "# Agent: copy SKILL.md + references/ into your skills folder\n" +
+            "# e.g. ~/.codex/skills/ascii-skill/ · .claude/skills/ascii-skill/\n" +
+            "# You generate new ASCII per project; assets/ is optional.\n\n" +
+            "# Clone demo site + optional runtime\n" +
             "git clone https://github.com/arjunkshah/ascii-skill.git\n" +
             "cd ascii-skill && open index.html\n\n" +
-            "# Agent install (copy SKILL.md + assets/ into your agent skills directory)\n" +
-            "# Examples: ~/.codex/skills/ascii-skill/ · .claude/skills/ascii-skill/\n\n" +
+            "# Optional — only for mouse-reactive fields\n" +
             "<script src=\"./assets/ascii-skill.js\" defer><\\/script>\n" +
             "<script defer>\n" +
             "  document.addEventListener('DOMContentLoaded', () => AsciiSkill.initAll());\n" +
             "<\\/script>\n\n" +
-            "# Or hotlink the published file (pin a commit SHA in production):\n" +
+            "# Hotlink helper (pin a SHA in production):\n" +
             "# https://github.com/arjunkshah/ascii-skill/raw/main/assets/ascii-skill.js";
           document.getElementById("installSnippet").textContent = raw;
         });
