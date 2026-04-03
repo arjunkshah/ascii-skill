@@ -6,7 +6,7 @@
     <title>ascii-skill</title>
     <meta
       name="description"
-      content="Agent skill for $ascii. Install with npx skills add and this GitHub repo."
+      content="Agent skill for $ascii. Minimal light landing, full hero, bento, before/after. Install: npx skills add."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,11 +26,14 @@
 
       :root {
         --bg: #fafafa;
+        --surface: #ffffff;
         --text: #111111;
         --muted: #737373;
         --line: #e5e5e5;
         --font: "Figtree", system-ui, sans-serif;
         --pixel: "Geist Pixel", monospace;
+        --nav-h: 3.25rem;
+        --radius: 12px;
       }
 
       *,
@@ -52,7 +55,6 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      /* All headings: Geist Pixel */
       h1,
       h2,
       h3 {
@@ -69,180 +71,473 @@
         opacity: 0.65;
       }
 
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 clamp(1.25rem, 4vw, 2rem);
+      }
+
+      /* Nav */
       .nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 20;
-        padding: 1.25rem 2rem;
+        z-index: 50;
+        height: var(--nav-h);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: rgba(250, 250, 250, 0.72);
-        backdrop-filter: blur(12px);
+        padding: 0 clamp(1.25rem, 4vw, 2rem);
+        background: rgba(250, 250, 250, 0.78);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--line);
       }
 
       .nav-brand {
         font-family: var(--pixel);
         font-size: 0.8rem;
         letter-spacing: 0.04em;
+      }
+
+      .gh-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--surface);
         color: var(--text);
       }
 
-      .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        font-family: var(--font);
-        font-size: 0.88rem;
-        color: var(--muted);
+      .gh-icon:hover {
+        opacity: 1;
+        border-color: #d4d4d4;
       }
 
-      .nav-actions a {
-        font-family: var(--font);
-        font-weight: 500;
+      .gh-icon svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
       }
 
-      .hero {
+      /* Full-screen hero */
+      .hero-full {
         position: relative;
         min-height: 100vh;
         min-height: 100dvh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6rem 2rem 4rem;
+        overflow: hidden;
       }
 
       .hero-ascii {
         position: absolute;
         inset: 0;
         z-index: 0;
-        --ascii-fg: rgba(17, 17, 17, 0.06);
-        --ascii-accent: rgba(17, 17, 17, 0.095);
+        /* Full ramp + blocks (high-density), not minimal dot field */
+        --ascii-fg: rgba(17, 17, 17, 0.13);
+        --ascii-accent: rgba(17, 17, 17, 0.22);
         --ascii-opacity: 1;
         --ascii-font: ui-monospace, "SF Mono", Menlo, monospace;
       }
 
-      .hero-inner {
-        position: relative;
-        z-index: 1;
-        text-align: center;
-        max-width: 36rem;
-      }
-
-      .hero-kicker {
-        margin: 0 0 1.5rem;
-        font-family: var(--pixel);
-        font-size: 0.72rem;
-        font-weight: 400;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .hero-inner h1 {
-        margin: 0 0 1.25rem;
-        font-family: var(--pixel);
-        font-size: clamp(1.35rem, 4.8vw, 2.35rem);
-        font-weight: 400;
-        letter-spacing: 0.02em;
-        line-height: 1.2;
-      }
-
-      .hero-inner h1 em {
-        font-style: normal;
-        font-size: 0.5em;
-        vertical-align: middle;
-        color: var(--muted);
-        letter-spacing: 0.1em;
-      }
-
-      /* Body copy: Figtree */
-      .hero-inner > p {
-        margin: 0 0 2.75rem;
-        font-family: var(--font);
-        font-size: 1.0625rem;
-        font-weight: 400;
-        color: var(--muted);
-        line-height: 1.65;
-      }
-
-      .cmd {
-        display: block;
-        width: fit-content;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 0.65rem 1rem;
+      .hero-frame {
+        position: absolute;
+        left: clamp(1rem, 3vw, 2rem);
+        right: clamp(1rem, 3vw, 2rem);
+        top: calc(var(--nav-h) + clamp(1rem, 3vw, 1.75rem));
+        bottom: clamp(1rem, 3vw, 2rem);
+        margin: 0;
+        padding: 0;
         font-family: ui-monospace, "SF Mono", Menlo, monospace;
-        font-size: 0.78rem;
-        color: var(--text);
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        user-select: all;
-        text-align: left;
-        overflow-x: auto;
-        white-space: nowrap;
+        font-size: clamp(7px, 0.85vw, 10px);
+        line-height: 1;
+        letter-spacing: 0;
+        color: rgba(17, 17, 17, 0.32);
+        pointer-events: none;
+        z-index: 2;
+        white-space: pre;
+        overflow: hidden;
       }
 
-      .block {
-        max-width: 38rem;
-        margin: 0 auto;
-        padding: 8rem 2rem 10rem;
+      .hero-tagline {
+        position: absolute;
+        z-index: 3;
+        left: clamp(1.25rem, 5vw, 3.5rem);
+        bottom: clamp(1.5rem, 5vw, 4.5rem);
+        max-width: min(36rem, calc(100vw - 2.5rem));
+        pointer-events: auto;
       }
 
-      .block h2 {
-        margin: 0 0 1.25rem;
+      .hero-tagline .eyebrow {
+        margin: 0 0 0.75rem;
         font-family: var(--pixel);
         font-size: 0.68rem;
-        font-weight: 400;
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--muted);
       }
 
-      .block p {
+      .hero-tagline h1 {
+        margin: 0 0 1rem;
+        font-size: clamp(1.25rem, 4.2vw, 2.15rem);
+        letter-spacing: 0.03em;
+        line-height: 1.18;
+      }
+
+      .hero-tagline h1 em {
+        font-style: normal;
+        font-size: 0.55em;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+      }
+
+      .hero-tagline .lede {
         margin: 0 0 1.5rem;
         font-family: var(--font);
         font-size: 1.0625rem;
         color: var(--muted);
-        line-height: 1.75;
+        line-height: 1.65;
+        max-width: 32rem;
       }
 
-      .block p:last-child {
-        margin-bottom: 0;
-      }
-
-      .links {
-        margin-top: 2.5rem;
-        padding-top: 2.5rem;
-        border-top: 1px solid var(--line);
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        font-family: var(--font);
-        font-size: 0.95rem;
-      }
-
-      .links a {
-        font-family: var(--font);
+      .cmd {
+        display: inline-block;
+        padding: 0.55rem 0.85rem;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 0.76rem;
         color: var(--text);
-        font-weight: 500;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        user-select: all;
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
       }
 
-      footer {
-        padding: 3rem 2rem 4rem;
-        font-family: var(--font);
-        text-align: center;
-        font-size: 0.8rem;
+      /* Sections */
+      .section {
+        padding: clamp(5rem, 14vw, 9rem) 0;
+      }
+
+      .section-intro {
+        max-width: 36rem;
+        margin-bottom: clamp(2rem, 5vw, 3rem);
+      }
+
+      .section-intro h2 {
+        margin: 0 0 0.75rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
         color: var(--muted);
       }
 
+      .section-intro p {
+        margin: 0;
+        font-family: var(--font);
+        font-size: 1.05rem;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      /* Compare */
+      .compare-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 3vw, 1.25rem);
+      }
+
+      @media (max-width: 800px) {
+        .compare-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .compare-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .compare-card header {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid var(--line);
+        font-family: var(--pixel);
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .compare-viewport {
+        position: relative;
+        height: 220px;
+      }
+
+      .demo-surface {
+        position: absolute;
+        inset: 0;
+        padding: 1rem;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .demo-surface[data-layer="off"] {
+        z-index: 1;
+        background: linear-gradient(165deg, #f3f3f3, #ebebeb);
+      }
+
+      .demo-surface[data-layer="on"] {
+        z-index: 2;
+      }
+
+      .demo-copy {
+        font-family: var(--font);
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .demo-copy strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .compare-slider {
+        width: calc(100% - 2rem);
+        margin: 0.6rem 1rem 1rem;
+        display: block;
+        accent-color: var(--text);
+      }
+
+      /* Bento */
+      .bento {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .bento .bottom-left {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .bento .wide {
+        grid-column: 2 / span 2;
+        grid-row: 2;
+      }
+
+      @media (max-width: 900px) {
+        .bento {
+          grid-template-columns: 1fr 1fr;
+        }
+        .bento .wide {
+          grid-column: span 2;
+          grid-row: auto;
+        }
+        .bento .bottom-left {
+          grid-row: auto;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .bento {
+          grid-template-columns: 1fr;
+        }
+        .bento .wide,
+        .bento .bottom-left {
+          grid-column: span 1;
+        }
+      }
+
+      .bento .cell {
+        position: relative;
+        min-height: 150px;
+        padding: 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .bento .cell h3 {
+        margin: 0 0 0.4rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+
+      .bento .cell p {
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        font-family: var(--font);
+        font-size: 0.94rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .bento-ascii {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        --ascii-fg: rgba(17, 17, 17, 0.07);
+        --ascii-accent: rgba(17, 17, 17, 0.14);
+        --ascii-opacity: 1;
+      }
+
+      .bento-ascii.spice {
+        --ascii-fg: rgba(17, 17, 17, 0.09);
+        --ascii-accent: rgba(17, 17, 17, 0.16);
+      }
+
+      /* Steps */
+      .steps {
+        display: grid;
+        gap: 1.25rem;
+        max-width: 40rem;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1.15rem;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .step:last-child {
+        border-bottom: none;
+      }
+
+      .step-num {
+        font-family: var(--pixel);
+        font-size: 0.7rem;
+        width: 2rem;
+        height: 2rem;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--muted);
+      }
+
+      .step h3 {
+        margin: 0 0 0.35rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .step p {
+        margin: 0;
+        font-family: var(--font);
+        font-size: 0.98rem;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      /* CTA */
+      .cta {
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 4px);
+        padding: clamp(2.5rem, 6vw, 3.5rem);
+        background: var(--surface);
+        text-align: center;
+        max-width: 40rem;
+        margin: 0 auto;
+      }
+
+      .cta h2 {
+        margin: 0 0 0.65rem;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+
+      .cta > p {
+        margin: 0 auto 1.5rem;
+        font-family: var(--font);
+        font-size: 1.02rem;
+        color: var(--muted);
+        max-width: 28rem;
+        line-height: 1.65;
+      }
+
+      .cta-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.55rem 1.15rem;
+        font-family: var(--font);
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .btn-primary {
+        background: var(--text);
+        color: #fafafa;
+        border-color: var(--text);
+      }
+
+      .cta .cmd-block {
+        text-align: left;
+        display: inline-block;
+        width: 100%;
+        max-width: 26rem;
+      }
+
+      .cta .cmd-block .cmd {
+        display: block;
+        margin-top: 0.4rem;
+        white-space: nowrap;
+        overflow-x: auto;
+      }
+
+      footer {
+        padding: 3.5rem clamp(1.25rem, 4vw, 2rem) 4rem;
+        font-family: var(--font);
+        font-size: 0.82rem;
+        color: var(--muted);
+        text-align: center;
+        border-top: 1px solid var(--line);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
       @media (prefers-reduced-motion: reduce) {
-        .hero-ascii canvas {
-          opacity: 0.25 !important;
+        [data-ascii-skill] canvas {
+          opacity: 0.35 !important;
         }
       }
     </style>
@@ -250,69 +545,288 @@
   <body>
     <header class="nav">
       <span class="nav-brand">$ascii</span>
-      <div class="nav-actions">
-        <a href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer">GitHub</a>
-      </div>
+      <a
+        class="gh-icon"
+        href="https://github.com/arjunkshah/ascii-skill"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="ascii-skill on GitHub"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.621.069-.621.317.044.62.163.885.346.266.183.487.426.647.71.135.253.318.476.538.655a2.079 2.079 0 002.37.196c.045-.52.27-1.006.635-1.37-2.219-.259-4.554-1.138-4.554-5.07a4.022 4.022 0 011.031-2.75 3.77 3.77 0 01.096-2.713s.839-.275 2.749 1.05a9.26 9.26 0 015.004 0c1.906-1.325 2.74-1.05 2.74-1.05.37.858.406 1.828.101 2.713a4.017 4.017 0 011.029 2.75c0 3.939-2.339 4.805-4.564 5.058a2.471 2.471 0 01.679 1.897c0 1.372-.012 2.477-.012 2.814 0 .268.18.592.687.492a10.05 10.05 0 005.388-4.421 10.473 10.473 0 001.313-6.948 10.32 10.32 0 00-3.39-6.165A9.847 9.847 0 0012 2z"
+          />
+        </svg>
+      </a>
     </header>
 
     <main>
-      <section class="hero" aria-label="Introduction">
+      <section class="hero-full" aria-label="Hero">
         <div
           class="hero-ascii"
           data-ascii-skill
           data-ascii-role="hero"
-          data-ascii-style="minimal"
-          data-ascii-cell-size="26"
+          data-ascii-density="high"
+          data-ascii-cell-size="11"
           data-ascii-3d="false"
         ></div>
-        <div class="hero-inner">
-          <p class="hero-kicker">Agent skill</p>
+        <pre class="hero-frame" id="heroFrame" aria-hidden="true"></pre>
+        <div class="hero-tagline">
+          <p class="eyebrow">Agent skill</p>
           <h1>ASCII for the interface. <em>$ascii</em></h1>
-          <p>
-            Agents compose fresh glyphs, frames, and texture for each UI. This page uses a sparse field—quiet motion,
-            lots of empty space.
+          <p class="lede">
+            Bespoke glyphs and frames per project—plus an optional runtime when you want a living field (this hero uses a
+            <strong>full shading ramp</strong>, not a dot wash).
           </p>
           <code class="cmd">npx skills add https://github.com/arjunkshah/ascii-skill</code>
         </div>
       </section>
 
-      <div class="block" id="install">
-        <h2>Install</h2>
-        <p>
-          The <strong>skills</strong> CLI pulls this repository into your configured agent skill directories. Use the
-          full URL or the <code style="background: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; border: 1px solid var(--line)">owner/repo</code> shorthand.
-        </p>
-        <p style="margin-top: 2rem">
-          <code class="cmd">npx skills add https://github.com/arjunkshah/ascii-skill</code>
-        </p>
-        <p style="margin-top: 1rem">
-          <code class="cmd">npx skills add arjunkshah/ascii-skill</code>
-        </p>
-        <p style="margin-top: 1.5rem; font-size: 0.95rem">
-          Agent targets and flags depend on your CLI version — run <code class="cmd" style="display: inline; padding: 0.2rem 0.45rem; font-size: 0.85rem">npx skills --help</code>.
-        </p>
-
-        <div class="links">
-          <a href="https://github.com/arjunkshah/ascii-skill/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer"
-            >Read SKILL.md</a
-          >
-          <a
-            href="https://github.com/arjunkshah/ascii-skill/raw/main/assets/ascii-skill.js"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Raw ascii-skill.js</a
-          >
+      <section class="section">
+        <div class="wrap">
+          <div class="section-intro">
+            <h2>Before / after</h2>
+            <p>Plain surface versus the skill’s animated field—drag to blend.</p>
+          </div>
+          <div class="compare-row">
+            <article class="compare-card">
+              <header><span>Hero-scale</span><span>01</span></header>
+              <div class="compare-viewport" id="cmpHero">
+                <div class="demo-surface" data-layer="off">
+                  <div class="demo-copy"><strong>Flat fill</strong> — no texture.</div>
+                </div>
+                <div class="demo-surface" data-layer="on" style="display: none">
+                  <div
+                    style="
+                      position: absolute;
+                      inset: 0;
+                      --ascii-fg: rgba(17, 17, 17, 0.12);
+                      --ascii-accent: rgba(17, 17, 17, 0.2);
+                    "
+                    data-ascii-skill
+                    data-ascii-role="hero"
+                    data-ascii-density="high"
+                    data-ascii-cell-size="10"
+                    data-ascii-3d="false"
+                  ></div>
+                  <div class="demo-copy" style="position: relative; z-index: 1">
+                    <strong>With $ascii</strong> — blocks &amp; ramp from the canvas helper.
+                  </div>
+                </div>
+              </div>
+              <label class="sr-only" for="sliderHero">Blend before and after</label>
+              <input class="compare-slider" id="sliderHero" type="range" min="0" max="100" value="68" />
+            </article>
+            <article class="compare-card">
+              <header><span>Ambient tile</span><span>02</span></header>
+              <div class="compare-viewport" id="cmpAmbient">
+                <div class="demo-surface" data-layer="off">
+                  <div class="demo-copy"><strong>Empty card</strong> — no depth.</div>
+                </div>
+                <div class="demo-surface" data-layer="on" style="display: none; background: transparent">
+                  <div
+                    style="
+                      position: absolute;
+                      inset: 0;
+                      --ascii-fg: rgba(17, 17, 17, 0.08);
+                      --ascii-accent: rgba(17, 17, 17, 0.12);
+                    "
+                    data-ascii-skill
+                    data-ascii-role="ambient"
+                    data-ascii-density="high"
+                    data-ascii-cell-size="7"
+                    data-ascii-3d="false"
+                  ></div>
+                  <div class="demo-copy" style="position: relative; z-index: 1">
+                    <strong>Quiet layer</strong> — same charset, lower weight.
+                  </div>
+                </div>
+              </div>
+              <label class="sr-only" for="sliderAmbient">Blend before and after</label>
+              <input class="compare-slider" id="sliderAmbient" type="range" min="0" max="100" value="62" />
+            </article>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <div class="section-intro">
+            <h2>Bento</h2>
+            <p>Three equal tiles, then one narrow + one wide—ASCII optional per cell.</p>
+          </div>
+          <div class="bento">
+            <div class="cell">
+              <div
+                class="bento-ascii"
+                data-ascii-skill
+                data-ascii-role="ambient"
+                data-ascii-density="high"
+                data-ascii-cell-size="6"
+                data-ascii-3d="false"
+              ></div>
+              <h3>Author first</h3>
+              <p>Agents write new <code style="font-size: 0.85em">&lt;pre&gt;</code> art per surface; the runtime is optional.</p>
+            </div>
+            <div class="cell">
+              <div
+                class="bento-ascii"
+                data-ascii-skill
+                data-ascii-role="ambient"
+                data-ascii-density="high"
+                data-ascii-cell-size="6"
+                data-ascii-3d="false"
+              ></div>
+              <h3>Ramps</h3>
+              <p>High-density charset shows █▓▒░-style motion—not only punctuation.</p>
+            </div>
+            <div class="cell">
+              <div
+                class="bento-ascii"
+                data-ascii-skill
+                data-ascii-role="ambient"
+                data-ascii-density="high"
+                data-ascii-cell-size="6"
+                data-ascii-3d="false"
+              ></div>
+              <h3>Theme</h3>
+              <p>Tune <code style="font-size: 0.85em">--ascii-fg</code> and <code style="font-size: 0.85em">--ascii-accent</code> on the host.</p>
+            </div>
+            <div class="cell bottom-left">
+              <h3>Docs</h3>
+              <p>See <strong>SKILL.md</strong> and <strong>references/patterns.md</strong>.</p>
+            </div>
+            <div class="cell wide">
+              <div
+                class="bento-ascii spice"
+                data-ascii-skill
+                data-ascii-role="feature"
+                data-ascii-density="high"
+                data-ascii-cell-size="9"
+                data-ascii-3d="false"
+              ></div>
+              <h3>Wide feature</h3>
+              <p>Mid-weight field for promos or strips—stronger than ambient, calmer than main hero.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <div class="section-intro">
+            <h2>How it works</h2>
+            <p>Three beats. Plenty of room.</p>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div>
+                <h3>Context</h3>
+                <p>Decide hero vs feature vs ambient; match brand and layout role.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div>
+                <h3>Markup</h3>
+                <p>Ship hand-authored ASCII in <code style="font-size: 0.9em">&lt;pre&gt;</code> / CSS when static is enough.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div>
+                <h3>Runtime</h3>
+                <p>Add <code style="font-size: 0.9em">ascii-skill.js</code> when you want mouse-aware fields—ramps, blocks, motion.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <div class="cta" id="install">
+            <h2>Install &amp; repo</h2>
+            <p>Use the skills CLI with this GitHub repository, or open the project for the demo HTML.</p>
+            <div class="cta-actions">
+              <a class="btn btn-primary" href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer"
+                >GitHub</a
+              >
+              <a class="btn" href="https://github.com/arjunkshah/ascii-skill/raw/main/assets/ascii-skill.js" target="_blank" rel="noopener noreferrer"
+                >ascii-skill.js</a
+              >
+            </div>
+            <div class="cmd-block">
+              <span style="font-family: var(--font); font-size: 0.85rem; color: var(--muted)">Install</span>
+              <code class="cmd">npx skills add https://github.com/arjunkshah/ascii-skill</code>
+              <code class="cmd">npx skills add arjunkshah/ascii-skill</code>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <footer>MIT · ascii-skill</footer>
+    <footer>MIT · ascii-skill · <span style="font-family: var(--pixel); letter-spacing: 0.06em">$ascii</span></footer>
 
     <script src="./assets/ascii-skill.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        AsciiSkill.initAll();
-      });
+      (function () {
+        function buildFrame(el, horiz, vert) {
+          var H = "─",
+            V = "│",
+            TL = "┌",
+            TR = "┐",
+            BL = "└",
+            BR = "┘";
+          var rowEdge = TL + H.repeat(Math.max(horiz - 2, 1)) + TR;
+          var rowMid = V + " ".repeat(Math.max(horiz - 2, 1)) + V;
+          var rowBot = BL + H.repeat(Math.max(horiz - 2, 1)) + BR;
+          var lines = [rowEdge];
+          for (var i = 0; i < vert - 2; i++) lines.push(rowMid);
+          lines.push(rowBot);
+          el.textContent = lines.join("\n");
+        }
+
+        function sizeHeroFrame() {
+          var el = document.getElementById("heroFrame");
+          if (!el) return;
+          var w = Math.max(24, Math.min(120, Math.floor(el.clientWidth / 7)));
+          var h = Math.max(10, Math.min(42, Math.floor(el.clientHeight / 12)));
+          buildFrame(el, w, h);
+        }
+
+        function setupCompare(rootId, sliderId) {
+          var root = document.getElementById(rootId);
+          var slider = document.getElementById(sliderId);
+          if (!root || !slider) return;
+          var offLayer = root.querySelector('[data-layer="off"]');
+          var onLayer = root.querySelector('[data-layer="on"]');
+          function apply(v) {
+            var t = v / 100;
+            offLayer.style.opacity = String(1 - t);
+            onLayer.style.display = "block";
+            onLayer.style.opacity = String(t);
+            if (t > 0.04 && !onLayer._asciiInited) {
+              AsciiSkill.initAll();
+              onLayer._asciiInited = true;
+            }
+          }
+          apply(parseInt(slider.value, 10));
+          slider.addEventListener("input", function () {
+            apply(parseInt(slider.value, 10));
+          });
+        }
+
+        window.addEventListener("resize", sizeHeroFrame);
+
+        document.addEventListener("DOMContentLoaded", function () {
+          AsciiSkill.initAll();
+          setupCompare("cmpHero", "sliderHero");
+          setupCompare("cmpAmbient", "sliderAmbient");
+          requestAnimationFrame(sizeHeroFrame);
+        });
+      })();
     </script>
   </body>
 </html>
