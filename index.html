@@ -161,40 +161,25 @@
         overflow: hidden;
       }
 
-      .hero-tagline {
+      .hero-inner {
         position: absolute;
         z-index: 3;
         left: clamp(1.25rem, 5vw, 3.5rem);
         bottom: clamp(1.5rem, 5vw, 4.5rem);
         max-width: min(36rem, calc(100vw - 2.5rem));
         pointer-events: auto;
+        text-align: left;
       }
 
-      .hero-tagline .eyebrow {
-        margin: 0 0 0.75rem;
-        font-family: var(--pixel);
-        font-size: 0.68rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .hero-tagline h1 {
+      .hero-inner h1 {
         margin: 0 0 1rem;
         font-size: clamp(1.25rem, 4.2vw, 2.15rem);
         letter-spacing: 0.03em;
         line-height: 1.18;
       }
 
-      .hero-tagline h1 em {
-        font-style: normal;
-        font-size: 0.55em;
-        color: var(--muted);
-        letter-spacing: 0.1em;
-      }
-
-      .hero-tagline .lede {
-        margin: 0 0 1.5rem;
+      .hero-inner .lede {
+        margin: 0;
         font-family: var(--font);
         font-size: 1.0625rem;
         color: var(--muted);
@@ -571,14 +556,12 @@
           data-ascii-3d="false"
         ></div>
         <pre class="hero-frame" id="heroFrame" aria-hidden="true"></pre>
-        <div class="hero-tagline">
-          <p class="eyebrow">Agent skill</p>
-          <h1>ASCII for the interface. <em>$ascii</em></h1>
+        <div class="hero-inner">
+          <h1>ASCII for the interface.</h1>
           <p class="lede">
-            Bespoke glyphs and frames per project—plus an optional runtime when you want a living field (this hero uses a
-            <strong>full shading ramp</strong>, not a dot wash).
+            Agents compose fresh glyphs, frames, and texture for each UI. This page uses a sparse field—quiet motion, lots of empty
+            space.
           </p>
-          <code class="cmd">npx skills add https://github.com/arjunkshah/ascii-skill</code>
         </div>
       </section>
 
