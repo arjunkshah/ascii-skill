@@ -6,7 +6,7 @@
     <title>ascii-skill</title>
     <meta
       name="description"
-      content="Agent skill for $ascii. Install with npx. Optional minimal canvas field."
+      content="Agent skill for $ascii. Install with npx skills add and this GitHub repo."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,7 +61,6 @@
         opacity: 0.65;
       }
 
-      /* Nav — light, barely there */
       .nav {
         position: fixed;
         top: 0;
@@ -95,7 +94,6 @@
         font-weight: 500;
       }
 
-      /* Full-screen hero */
       .hero {
         position: relative;
         min-height: 100vh;
@@ -120,7 +118,7 @@
         position: relative;
         z-index: 1;
         text-align: center;
-        max-width: 32rem;
+        max-width: 36rem;
       }
 
       .hero-kicker {
@@ -158,18 +156,24 @@
       }
 
       .cmd {
-        display: inline-block;
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
         padding: 0.65rem 1rem;
         font-family: ui-monospace, "SF Mono", Menlo, monospace;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         color: var(--text);
         background: #fff;
         border: 1px solid var(--line);
         border-radius: 6px;
         user-select: all;
+        text-align: left;
+        overflow-x: auto;
+        white-space: nowrap;
       }
 
-      /* Content */
       .block {
         max-width: 38rem;
         margin: 0 auto;
@@ -250,43 +254,24 @@
             Agents compose fresh glyphs, frames, and texture for each UI. This page uses a sparse field—quiet motion,
             lots of empty space.
           </p>
-          <code class="cmd">npx ascii-skill</code>
+          <code class="cmd">npx skills add https://github.com/arjunkshah/ascii-skill</code>
         </div>
       </section>
 
       <div class="block" id="install">
         <h2>Install</h2>
         <p>
-          Runs from npm and copies <code>SKILL.md</code>, <code>references/</code>, and <code>assets/</code> into your
-          skill folders. Default targets both
-          <code>.claude/skills</code> (project) and <code>~/.codex/skills</code> (Codex).
+          The <strong>skills</strong> CLI pulls this repository into your configured agent skill directories. Use the
+          full URL or the <code style="background: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; border: 1px solid var(--line)">owner/repo</code> shorthand.
         </p>
         <p style="margin-top: 2rem">
-          <code class="cmd" style="display: block; width: fit-content">npx ascii-skill</code>
+          <code class="cmd">npx skills add https://github.com/arjunkshah/ascii-skill</code>
         </p>
-        <p>
-          <code class="cmd" style="display: block; width: fit-content; margin-top: 0.75rem"
-            >npx ascii-skill install --claude</code
-          >
-          <span style="display: block; margin-top: 0.5rem; font-size: 0.9rem; color: var(--muted)"
-            >Only <code style="background: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; border: 1px solid var(--line)"
-              >./.claude/skills/ascii-skill</code
-            ></span
-          >
+        <p style="margin-top: 1rem">
+          <code class="cmd">npx skills add arjunkshah/ascii-skill</code>
         </p>
-        <p>
-          <code class="cmd" style="display: block; width: fit-content">npx ascii-skill install --codex</code>
-          <span style="display: block; margin-top: 0.5rem; font-size: 0.9rem; color: var(--muted)"
-            >Only <code style="background: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; border: 1px solid var(--line)"
-              >~/.codex/skills/ascii-skill</code
-            ></span
-          >
-        </p>
-        <p>
-          Before publish to npm, install from the repo:
-          <code class="cmd" style="display: block; width: fit-content; margin-top: 0.75rem"
-            >npx github:arjunkshah/ascii-skill</code
-          >
+        <p style="margin-top: 1.5rem; font-size: 0.95rem">
+          Agent targets and flags depend on your CLI version — run <code class="cmd" style="display: inline; padding: 0.2rem 0.45rem; font-size: 0.85rem">npx skills --help</code>.
         </p>
 
         <div class="links">

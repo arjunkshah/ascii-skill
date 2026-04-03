@@ -30,21 +30,21 @@ Deep catalogs of charsets, roles, and implementation notes: `references/patterns
 
 ---
 
-## Install the skill (npx)
+## Install the skill
+
+Use the **Agent Skills** CLI (`npx skills`) and point it at this repo:
 
 ```bash
-npx ascii-skill
+npx skills add https://github.com/arjunkshah/ascii-skill
 ```
 
-Writes `SKILL.md`, `references/`, and `assets/` to `./.claude/skills/ascii-skill` and `~/.codex/skills/ascii-skill` by default.
+Short form:
 
 ```bash
-npx ascii-skill install --claude
-npx ascii-skill install --codex
-npx ascii-skill install --dir ./parent   # creates ./parent/ascii-skill
+npx skills add arjunkshah/ascii-skill
 ```
 
-From GitHub before npm: `npx github:arjunkshah/ascii-skill`
+That installs the skill (this `SKILL.md`, `references/`, `assets/`) into the agent paths your CLI is configured for (e.g. project `.claude/skills/`, `.codex/skills/`, etc.). Use the CLI’s flags for a specific agent or scope if needed (`npx skills --help`).
 
 ---
 
@@ -52,7 +52,7 @@ From GitHub before npm: `npx github:arjunkshah/ascii-skill`
 
 Use **only** when a **fluid, cursor-reactive** ASCII *field* (not a fixed `<pre>`) genuinely matches the design—e.g. hero atmosphere or a single feature panel.
 
-- Run **npx** (above) or copy `assets/ascii-skill.js`; add `data-ascii-skill`, call `AsciiSkill.initAll()` after load (see `references/patterns.md`).
+- Run **`npx skills add`** (above) or copy `assets/ascii-skill.js`; add `data-ascii-skill`, call `AsciiSkill.initAll()` after load (see `references/patterns.md`).
 - Still set **custom** CSS variables on the host so the field matches **this** theme.
 - **Ambient** tiles: `data-ascii-role="ambient"`, low `--ascii-opacity`, `data-ascii-3d="false"`.
 - **Turbo / density** (optional): `data-ascii-turbo="true"` for faster drift + snappier cursor tracking + stronger waves; `data-ascii-density="high"` for a wider shading charset. Use sparingly (heroes, demos)—not for quiet cards unless explicitly requested.
