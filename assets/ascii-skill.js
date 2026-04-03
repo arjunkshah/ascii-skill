@@ -74,6 +74,7 @@
     this._cell = 12;
     this._mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     this._time = 0;
+    this._reducedMotion = false;
     this._resizeObserver = null;
     this._onMove = this._onMove.bind(this);
     this._onLeave = this._onLeave.bind(this);
