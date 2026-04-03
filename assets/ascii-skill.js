@@ -8,6 +8,7 @@
 
   var DEFAULT_CHARSET = " .·-:+*=%@#";
   var HIGH_RES_CHARSET = " ··░░▒▒▓▓██▀▄";
+  var MINIMAL_CHARSET = "  ·∙·∙'";
 
   function hash2(ix, iy, seed) {
     var n =
@@ -37,6 +38,7 @@
         perspective3d: true,
         autoStart: true,
         turbo: false,
+        minimal: false,
       },
       options || {}
     );
@@ -76,6 +78,18 @@
 
     this._applyRoleDefaults();
 
+    if (this.options.minimal) {
+      this.options.turbo = false;
+      this.options.perspective3d = false;
+      if (!options || options.cellSize == null) {
+        this.options.cellSize = 22;
+        this._cell = 22;
+      }
+      if (!options || !options.charset) {
+        this.options.charset = MINIMAL_CHARSET;
+      }
+    }
+
     if (
       typeof window !== "undefined" &&
       window.matchMedia &&
@@ -106,6 +120,7 @@
 
   AsciiSkill.prototype._mouseSnap = function () {
     if (this._reducedMotion) return 0.08;
+    if (this.options.minimal) return 0.1;
     var role = this.options.role;
     if (this.options.turbo && role === "hero") return 0.52;
     if (this.options.turbo) return 0.38;
@@ -120,6 +135,7 @@
     var base =
       role === "ambient" ? 0.55 : role === "hero" ? 2.35 : 1.35;
     if (this.options.turbo) base *= role === "hero" ? 2.15 : 1.65;
+    if (this.options.minimal) base *= 0.38;
     return base;
   };
 
@@ -188,6 +204,8 @@
     this._time += this._timeBoost();
     var t = this._time * 0.001;
     var tw = turbo ? 1.75 : 1;
+    var min = this.options.minimal;
+    if (min) tw = 0.55;
 
     ctx.clearRect(0, 0, w, h);
     ctx.textBaseline = "middle";
@@ -199,6 +217,7 @@
 
     var mouseWeight =
       role === "ambient" ? (turbo ? 0.55 : 0.35) : role === "hero" ? (turbo ? 1.65 : 1.25) : 1;
+    if (min) mouseWeight *= 0.55;
 
     for (var iy = 0; iy < this._rows; iy++) {
       for (var ix = 0; ix < this._cols; ix++) {
@@ -211,12 +230,12 @@
 
         var n1 = hash2(ix, iy, Math.floor(this._time * (turbo ? 0.08 : 0.02)));
         var wave =
-          Math.sin(t * (8 + tw * 5) * tw + nx * (11 + tw * 5) + ny * (9 + tw * 4)) * 0.52 +
-          Math.sin(t * (5.2 + tw * 3) + nx * (18 + tw * 8)) * 0.28 +
-          Math.sin(t * (14 * tw) - dist * (22 * tw)) * (turbo ? 0.18 : 0.06);
+          Math.sin(t * (8 + tw * 5) * tw + nx * (11 + tw * 5) + ny * (9 + tw * 4)) * (min ? 0.22 : 0.52) +
+          Math.sin(t * (5.2 + tw * 3) + nx * (18 + tw * 8)) * (min ? 0.12 : 0.28) +
+          Math.sin(t * (14 * tw) - dist * (22 * tw)) * (turbo ? 0.18 : min ? 0.03 : 0.06);
 
         var flow =
-          Math.sin(t * 11 * tw + (nx + mx) * 14 + (ny - my) * 14) * (turbo ? 0.12 : 0.04);
+          Math.sin(t * 11 * tw + (nx + mx) * 14 + (ny - my) * 14) * (turbo ? 0.12 : min ? 0.02 : 0.04);
 
         var base =
           n1 * 0.48 +
@@ -317,8 +336,9 @@
         followMouse: el.getAttribute("data-ascii-follow") !== "false",
         perspective3d: el.getAttribute("data-ascii-3d") !== "false",
         turbo: el.getAttribute("data-ascii-turbo") === "true",
+        minimal: el.getAttribute("data-ascii-style") === "minimal",
       };
-      if (highRes) opts.charset = HIGH_RES_CHARSET;
+      if (highRes && !opts.minimal) opts.charset = HIGH_RES_CHARSET;
       var inst = new AsciiSkill(el, opts);
       el._asciiSkillInstance = inst;
       out.push(inst);

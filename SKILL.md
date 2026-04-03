@@ -30,14 +30,33 @@ Deep catalogs of charsets, roles, and implementation notes: `references/patterns
 
 ---
 
+## Install the skill (npx)
+
+```bash
+npx ascii-skill
+```
+
+Writes `SKILL.md`, `references/`, and `assets/` to `./.claude/skills/ascii-skill` and `~/.codex/skills/ascii-skill` by default.
+
+```bash
+npx ascii-skill install --claude
+npx ascii-skill install --codex
+npx ascii-skill install --dir ./parent   # creates ./parent/ascii-skill
+```
+
+From GitHub before npm: `npx github:arjunkshah/ascii-skill`
+
+---
+
 ## Optional: live mouse-reactive field (`assets/ascii-skill.js`)
 
 Use **only** when a **fluid, cursor-reactive** ASCII *field* (not a fixed `<pre>`) genuinely matches the design—e.g. hero atmosphere or a single feature panel.
 
-- Copy `assets/ascii-skill.js`, add `data-ascii-skill`, call `AsciiSkill.initAll()` after load (see `references/patterns.md`).
+- Run **npx** (above) or copy `assets/ascii-skill.js`; add `data-ascii-skill`, call `AsciiSkill.initAll()` after load (see `references/patterns.md`).
 - Still set **custom** CSS variables on the host so the field matches **this** theme.
 - **Ambient** tiles: `data-ascii-role="ambient"`, low `--ascii-opacity`, `data-ascii-3d="false"`.
 - **Turbo / density** (optional): `data-ascii-turbo="true"` for faster drift + snappier cursor tracking + stronger waves; `data-ascii-density="high"` for a wider shading charset. Use sparingly (heroes, demos)—not for quiet cards unless explicitly requested.
+- **Minimal** (optional): `data-ascii-style="minimal"` for large cells, sparse charset (`·∙`), slow drift, no 3D—suited to light, whitespace-heavy UIs.
 
 The script does **not** replace authoring; it’s one technique for motion + density. Static bespoke ASCII is often the right answer.
 

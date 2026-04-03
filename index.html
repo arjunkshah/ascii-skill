@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ascii-skill — $ascii for agents</title>
+    <title>ascii-skill</title>
     <meta
       name="description"
-      content="Agent skill for original ASCII UI layers. Optional hyper-responsive canvas runtime."
+      content="Agent skill for $ascii. Install with npx. Optional minimal canvas field."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,22 +25,12 @@
       }
 
       :root {
-        --bg: #060607;
-        --bg2: #0b0c0f;
-        --surface: rgba(255, 255, 255, 0.03);
-        --surface2: rgba(255, 255, 255, 0.055);
-        --border: rgba(255, 255, 255, 0.09);
-        --border-strong: rgba(255, 255, 255, 0.14);
-        --text: #f4f5f7;
-        --muted: #8a8f98;
-        --accent: #828fff;
-        --accent2: #5eead4;
-        --accent-hot: #a5b4fc;
-        --radius: 12px;
-        --radius-lg: 20px;
-        --font-sans: "Figtree", system-ui, sans-serif;
-        --font-pixel: "Geist Pixel", monospace;
-        --nav-h: 56px;
+        --bg: #fafafa;
+        --text: #111111;
+        --muted: #737373;
+        --line: #e5e5e5;
+        --font: "Figtree", system-ui, sans-serif;
+        --pixel: "Geist Pixel", monospace;
       }
 
       *,
@@ -55,29 +45,11 @@
 
       body {
         margin: 0;
-        font-family: var(--font-sans);
+        font-family: var(--font);
         background: var(--bg);
         color: var(--text);
-        line-height: 1.55;
+        line-height: 1.6;
         -webkit-font-smoothing: antialiased;
-      }
-
-      /* Aurora mesh — Linear-adjacent */
-      .mesh {
-        pointer-events: none;
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        background:
-          radial-gradient(70% 55% at 15% -10%, rgba(130, 143, 255, 0.34), transparent 55%),
-          radial-gradient(50% 40% at 85% 5%, rgba(94, 234, 212, 0.12), transparent 50%),
-          radial-gradient(40% 35% at 50% 100%, rgba(130, 143, 255, 0.08), transparent 45%),
-          var(--bg);
-      }
-
-      .page {
-        position: relative;
-        z-index: 1;
       }
 
       a {
@@ -85,865 +57,258 @@
         text-decoration: none;
       }
 
-      .wrap {
-        max-width: 1160px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
+      a:hover {
+        opacity: 0.65;
       }
 
-      .mono-caps {
-        font-family: var(--font-pixel);
-        font-size: 0.72rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      /* Nav */
+      /* Nav — light, barely there */
       .nav {
-        position: sticky;
+        position: fixed;
         top: 0;
-        z-index: 50;
-        height: var(--nav-h);
-        border-bottom: 1px solid var(--border);
-        background: rgba(6, 6, 7, 0.72);
-        backdrop-filter: blur(16px) saturate(1.2);
-      }
-
-      .nav-inner {
-        height: 100%;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        padding: 1.25rem 2rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
+        background: rgba(250, 250, 250, 0.72);
+        backdrop-filter: blur(12px);
       }
 
-      .logo {
-        display: flex;
-        align-items: baseline;
-        gap: 0.35rem;
-      }
-
-      .logo-mark {
-        font-family: var(--font-pixel);
-        font-size: 0.95rem;
+      .nav-brand {
+        font-family: var(--pixel);
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
         color: var(--text);
       }
 
-      .logo-rest {
-        font-family: var(--font-pixel);
-        font-size: 0.68rem;
-        color: var(--muted);
-      }
-
-      .nav-links {
+      .nav-actions {
         display: flex;
         align-items: center;
-        gap: 0.35rem;
-      }
-
-      @media (max-width: 720px) {
-        .nav-links .nl {
-          display: none;
-        }
-      }
-
-      .nl {
-        padding: 0.45rem 0.75rem;
-        border-radius: 8px;
+        gap: 1.5rem;
         font-size: 0.88rem;
         color: var(--muted);
       }
 
-      .nl:hover {
-        color: var(--text);
-        background: var(--surface);
+      .nav-actions a {
+        font-weight: 500;
       }
 
-      .gh {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 9px;
-        border: 1px solid var(--border);
-        background: var(--surface);
-      }
-
-      .gh:hover {
-        border-color: var(--border-strong);
-        background: var(--surface2);
-      }
-
-      .gh svg {
-        width: 18px;
-        height: 18px;
-        fill: currentColor;
-        opacity: 0.85;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        padding: 0.55rem 1rem;
-        border-radius: 999px;
-        font-weight: 600;
-        font-size: 0.88rem;
-        border: 1px solid var(--border);
-        transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
-      }
-
-      .btn:active {
-        transform: scale(0.98);
-      }
-
-      .btn-primary {
-        background: var(--text);
-        color: #070708;
-        border-color: rgba(255, 255, 255, 0.2);
-      }
-
-      .btn-primary:hover {
-        background: #fff;
-      }
-
-      .btn-ghost {
-        background: transparent;
-        color: var(--text);
-      }
-
-      .btn-ghost:hover {
-        background: var(--surface);
-        border-color: var(--border-strong);
-      }
-
-      /* Hero */
+      /* Full-screen hero */
       .hero {
         position: relative;
-        min-height: calc(100vh - var(--nav-h));
-        padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(3rem, 8vw, 6rem);
-        overflow: hidden;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6rem 2rem 4rem;
       }
 
       .hero-ascii {
         position: absolute;
         inset: 0;
         z-index: 0;
-        --ascii-fg: rgba(154, 164, 255, 0.42);
-        --ascii-accent: rgba(94, 234, 212, 0.95);
+        --ascii-fg: rgba(17, 17, 17, 0.06);
+        --ascii-accent: rgba(17, 17, 17, 0.095);
         --ascii-opacity: 1;
         --ascii-font: ui-monospace, "SF Mono", Menlo, monospace;
       }
 
-      .hero-grid {
+      .hero-inner {
         position: relative;
         z-index: 1;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-        align-items: center;
+        text-align: center;
+        max-width: 32rem;
       }
 
-      @media (min-width: 960px) {
-        .hero-grid {
-          grid-template-columns: 1.05fr 0.95fr;
-          gap: 3rem;
-        }
-      }
-
-      .hero-copy h1 {
-        margin: 0 0 1rem;
-        font-size: clamp(2.35rem, 5.5vw, 3.75rem);
-        font-weight: 620;
-        letter-spacing: -0.035em;
-        line-height: 1.05;
-      }
-
-      .hero-copy h1 .pixel {
-        font-family: var(--font-pixel);
-        font-size: 0.92em;
-        color: var(--accent-hot);
-        text-shadow: 0 0 42px rgba(130, 143, 255, 0.45);
-      }
-
-      .hero-lede {
-        margin: 0 0 1.75rem;
-        font-size: 1.15rem;
-        color: var(--muted);
-        max-width: 34rem;
-        line-height: 1.6;
-      }
-
-      .hero-ctas {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-      }
-
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1.5rem;
-        padding: 0.35rem 0.65rem;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        background: rgba(0, 0, 0, 0.35);
-        font-size: 0.8rem;
-        color: var(--muted);
-      }
-
-      .hero-badge kbd {
-        font-family: var(--font-pixel);
-        font-size: 0.72rem;
-        padding: 0.15rem 0.4rem;
-        border-radius: 6px;
-        background: var(--surface2);
-        color: var(--accent2);
-        border: 1px solid var(--border);
-      }
-
-      /* Product mock — Linear-style panel */
-      .mock {
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border-strong);
-        background: linear-gradient(165deg, rgba(18, 19, 24, 0.94), rgba(8, 9, 12, 0.92));
-        box-shadow:
-          0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-          0 24px 80px rgba(0, 0, 0, 0.55),
-          0 0 120px rgba(130, 143, 255, 0.08);
-        overflow: hidden;
-      }
-
-      .mock-bar {
-        display: flex;
-        align-items: center;
-        gap: 0.45rem;
-        padding: 0.65rem 1rem;
-        border-bottom: 1px solid var(--border);
-        background: rgba(0, 0, 0, 0.35);
-      }
-
-      .dot {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: #444;
-      }
-
-      .dot:nth-child(1) {
-        background: #ff5f57;
-      }
-
-      .dot:nth-child(2) {
-        background: #febc2e;
-      }
-
-      .dot:nth-child(3) {
-        background: #28c840;
-      }
-
-      .mock-title {
-        margin-left: 0.35rem;
-        font-size: 0.78rem;
-        color: var(--muted);
-        font-family: ui-monospace, monospace;
-      }
-
-      .mock-body {
-        position: relative;
-        min-height: 280px;
-        padding: 1rem;
-      }
-
-      .mock-ascii {
-        position: absolute;
-        inset: 0;
-        --ascii-fg: rgba(130, 143, 255, 0.28);
-        --ascii-accent: rgba(94, 234, 212, 0.9);
-        --ascii-opacity: 0.95;
-      }
-
-      .mock-stack {
-        position: relative;
-        z-index: 1;
-        display: grid;
-        gap: 0.5rem;
-      }
-
-      .issue {
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        padding: 0.65rem 0.75rem;
-        background: rgba(0, 0, 0, 0.4);
-        display: grid;
-        gap: 0.15rem;
-      }
-
-      .issue-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-      }
-
-      .issue-id {
-        font-family: ui-monospace, monospace;
-        font-size: 0.72rem;
-        color: var(--muted);
-      }
-
-      .issue-pill {
-        font-size: 0.65rem;
-        font-family: var(--font-pixel);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        padding: 0.2rem 0.45rem;
-        border-radius: 6px;
-        background: rgba(130, 143, 255, 0.15);
-        color: var(--accent-hot);
-        border: 1px solid rgba(130, 143, 255, 0.25);
-      }
-
-      .issue-title {
-        margin: 0;
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      .issue-meta {
+      .hero-kicker {
+        margin: 0 0 1.5rem;
         font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
         color: var(--muted);
       }
 
-      /* Section rhythm */
-      section {
-        padding: clamp(3.5rem, 7vw, 5.5rem) 0;
-      }
-
-      .section-head {
-        max-width: 720px;
-        margin-bottom: 2.25rem;
-      }
-
-      .section-head h2 {
-        margin: 0 0 0.65rem;
-        font-size: clamp(1.65rem, 3vw, 2.35rem);
-        font-weight: 620;
+      .hero-inner h1 {
+        margin: 0 0 1.25rem;
+        font-size: clamp(2rem, 6vw, 3.25rem);
+        font-weight: 400;
         letter-spacing: -0.03em;
         line-height: 1.15;
       }
 
-      .section-head p {
-        margin: 0;
+      .hero-inner h1 em {
+        font-style: normal;
+        font-family: var(--pixel);
+        font-size: 0.42em;
+        vertical-align: middle;
         color: var(--muted);
-        font-size: 1.05rem;
+        letter-spacing: 0.08em;
       }
 
-      .rule {
-        display: flex;
-        align-items: center;
-        gap: 0.65rem;
-        margin-bottom: 0.85rem;
+      .hero-inner > p {
+        margin: 0 0 2.75rem;
+        font-size: 1.0625rem;
+        font-weight: 400;
         color: var(--muted);
-        font-family: var(--font-pixel);
-        font-size: 0.7rem;
-        letter-spacing: 0.18em;
+        line-height: 1.65;
       }
 
-      .rule::before,
-      .rule::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
-        opacity: 0.85;
-      }
-
-      /* Feature grid — Composio numbered */
-      .feat-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-      }
-
-      @media (max-width: 900px) {
-        .feat-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .feat {
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        padding: 1.35rem 1.25rem;
-        background: var(--surface);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .feat-num {
-        font-family: var(--font-pixel);
-        font-size: 0.75rem;
-        color: var(--accent2);
-        margin-bottom: 0.65rem;
-        opacity: 0.95;
-      }
-
-      .feat h3 {
-        margin: 0 0 0.45rem;
-        font-size: 1.05rem;
-        font-weight: 650;
-      }
-
-      .feat p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.94rem;
-      }
-
-      .feat-ascii {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        --ascii-fg: rgba(130, 143, 255, 0.14);
-        --ascii-accent: rgba(94, 234, 212, 0.45);
-        --ascii-opacity: 0.9;
-      }
-
-      .feat > *:not(.feat-ascii) {
-        position: relative;
-        z-index: 1;
-      }
-
-      /* Split cards */
-      .split {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-
-      @media (max-width: 840px) {
-        .split {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .card-big {
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        padding: 1.75rem 1.5rem;
-        background: linear-gradient(145deg, rgba(20, 21, 28, 0.9), rgba(10, 11, 14, 0.95));
-        position: relative;
-        overflow: hidden;
-        min-height: 240px;
-      }
-
-      .card-big h3 {
-        margin: 0 0 0.5rem;
-        font-family: var(--font-pixel);
-        font-size: 0.85rem;
-        letter-spacing: 0.1em;
-        color: var(--accent-hot);
-      }
-
-      .card-big .lead {
-        margin: 0 0 1rem;
-        font-size: 1.2rem;
-        font-weight: 600;
-        max-width: 22rem;
-      }
-
-      .card-big p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.95rem;
-        max-width: 26rem;
-      }
-
-      .card-big .card-ascii {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        --ascii-fg: rgba(255, 255, 255, 0.1);
-        --ascii-accent: rgba(130, 143, 255, 0.55);
-        --ascii-opacity: 1;
-      }
-
-      .card-big .card-in {
-        position: relative;
-        z-index: 1;
-      }
-
-      .link-row {
-        margin-top: 1.25rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--accent2);
-      }
-
-      .link-row:hover {
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
-
-      /* Terminal strip */
-      .term {
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        background: #050508;
-        overflow: hidden;
-      }
-
-      .term-bar {
-        padding: 0.5rem 0.85rem;
-        border-bottom: 1px solid var(--border);
-        font-family: ui-monospace, monospace;
-        font-size: 0.75rem;
-        color: var(--muted);
-      }
-
-      .term pre {
-        margin: 0;
-        padding: 1rem 1.1rem 1.15rem;
-        font-size: 0.78rem;
-        line-height: 1.5;
-        color: var(--accent2);
-        overflow-x: auto;
+      .cmd {
+        display: inline-block;
+        padding: 0.65rem 1rem;
         font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 0.8rem;
+        color: var(--text);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        user-select: all;
       }
 
-      .term .c {
-        color: rgba(154, 164, 255, 0.85);
+      /* Content */
+      .block {
+        max-width: 38rem;
+        margin: 0 auto;
+        padding: 8rem 2rem 10rem;
       }
 
-      .term .m {
+      .block h2 {
+        margin: 0 0 1.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
         color: var(--muted);
       }
 
-      /* CTA band */
-      .cta-band {
-        margin-top: 1rem;
-        padding: clamp(2.5rem, 5vw, 3.5rem);
-        border-radius: calc(var(--radius-lg) + 6px);
-        border: 1px solid rgba(130, 143, 255, 0.28);
-        background:
-          radial-gradient(80% 120% at 10% 0%, rgba(130, 143, 255, 0.18), transparent 55%),
-          radial-gradient(60% 80% at 90% 100%, rgba(94, 234, 212, 0.08), transparent 45%),
-          rgba(12, 13, 18, 0.9);
-        text-align: center;
-      }
-
-      .cta-band h2 {
-        margin: 0 0 0.65rem;
-        font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-        font-weight: 650;
-        letter-spacing: -0.02em;
-      }
-
-      .cta-band p {
-        margin: 0 auto 1.35rem;
-        max-width: 520px;
+      .block p {
+        margin: 0 0 1.5rem;
+        font-size: 1.0625rem;
         color: var(--muted);
+        line-height: 1.75;
       }
 
-      .cta-actions {
+      .block p:last-child {
+        margin-bottom: 0;
+      }
+
+      .links {
+        margin-top: 2.5rem;
+        padding-top: 2.5rem;
+        border-top: 1px solid var(--line);
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-        justify-content: center;
-      }
-
-      /* Footer */
-      footer {
-        padding: 2.5rem 0 3rem;
-        border-top: 1px solid var(--border);
-        color: var(--muted);
-        font-size: 0.88rem;
-      }
-
-      .foot-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
         gap: 0.75rem;
+        font-size: 0.95rem;
+      }
+
+      .links a {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      footer {
+        padding: 3rem 2rem 4rem;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--muted);
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .hero-ascii canvas,
-        .mock-ascii canvas,
-        .feat-ascii canvas,
-        .card-ascii canvas {
-          opacity: 0.35 !important;
+        .hero-ascii canvas {
+          opacity: 0.25 !important;
         }
       }
     </style>
   </head>
   <body>
-    <div class="mesh" aria-hidden="true"></div>
-    <div class="page">
-      <header class="nav">
-        <div class="wrap nav-inner">
-          <a href="#" class="logo" aria-label="ascii-skill">
-            <span class="logo-mark">$ascii</span>
-            <span class="logo-rest">skill</span>
-          </a>
-          <div class="nav-links">
-            <a class="nl" href="#workflow">Workflow</a>
-            <a class="nl" href="#install">Install</a>
-            <a
-              class="gh"
-              href="https://github.com/arjunkshah/ascii-skill"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.621.069-.621.317.044.62.163.885.346.266.183.487.426.647.71.135.253.318.476.538.655a2.079 2.079 0 002.37.196c.045-.52.27-1.006.635-1.37-2.219-.259-4.554-1.138-4.554-5.07a4.022 4.022 0 011.031-2.75 3.77 3.77 0 01.096-2.713s.839-.275 2.749 1.05a9.26 9.26 0 015.004 0c1.906-1.325 2.74-1.05 2.74-1.05.37.858.406 1.828.101 2.713a4.017 4.017 0 011.029 2.75c0 3.939-2.339 4.805-4.564 5.058a2.471 2.471 0 01.679 1.897c0 1.372-.012 2.477-.012 2.814 0 .268.18.592.687.492a10.05 10.05 0 005.388-4.421 10.473 10.473 0 001.313-6.948 10.32 10.32 0 00-3.39-6.165A9.847 9.847 0 0012 2z"
-                />
-              </svg>
-            </a>
-            <a class="btn btn-primary" href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer"
-              >Get the skill</a
-            >
-          </div>
-        </div>
-      </header>
+    <header class="nav">
+      <span class="nav-brand">$ascii</span>
+      <div class="nav-actions">
+        <a href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </header>
 
-      <section class="hero wrap">
+    <main>
+      <section class="hero" aria-label="Introduction">
         <div
           class="hero-ascii"
           data-ascii-skill
           data-ascii-role="hero"
-          data-ascii-turbo="true"
-          data-ascii-density="high"
-          data-ascii-cell-size="11"
+          data-ascii-style="minimal"
+          data-ascii-cell-size="26"
+          data-ascii-3d="false"
         ></div>
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <h1>ASCII that chases <span class="pixel">the cursor</span></h1>
-            <p class="hero-lede">
-              A skill for coding agents to <strong>author</strong> bespoke UI texture—plus an optional runtime tuned for
-              snappy, high-rate motion when you want the field to feel electric.
-            </p>
-            <div class="hero-ctas">
-              <a class="btn btn-primary" href="#install">Install instructions</a>
-              <a
-                class="btn btn-ghost"
-                href="https://github.com/arjunkshah/ascii-skill/raw/main/assets/ascii-skill.js"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Download runtime</a
-              >
-            </div>
-            <div class="hero-badge"><span>Trigger in your agent with</span> <kbd>$ascii</kbd></div>
-          </div>
-          <div class="mock" aria-hidden="true">
-            <div class="mock-bar">
-              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-              <span class="mock-title">ascii-skill / preview</span>
-            </div>
-            <div class="mock-body">
-              <div
-                class="mock-ascii"
-                data-ascii-skill
-                data-ascii-role="feature"
-                data-ascii-turbo="true"
-                data-ascii-density="high"
-                data-ascii-cell-size="9"
-              ></div>
-              <div class="mock-stack">
-                <div class="issue">
-                  <div class="issue-top">
-                    <span class="issue-id">ASCII-128</span>
-                    <span class="issue-pill">live</span>
-                  </div>
-                  <p class="issue-title">Make hero field follow pointer with sub-frame snap</p>
-                  <p class="issue-meta">Turbo mode · high-res charset · perspective ok</p>
-                </div>
-                <div class="issue">
-                  <div class="issue-top">
-                    <span class="issue-id">ASCII-129</span>
-                    <span class="issue-pill">ambient</span>
-                  </div>
-                  <p class="issue-title">Keep bento tiles whisper-quiet: density low, 3D off</p>
-                  <p class="issue-meta">Skill defaults to hand-authored &lt;pre&gt; art</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="hero-inner">
+          <p class="hero-kicker">Agent skill</p>
+          <h1>ASCII for the interface. <em>$ascii</em></h1>
+          <p>
+            Agents compose fresh glyphs, frames, and texture for each UI. This page uses a sparse field—quiet motion,
+            lots of empty space.
+          </p>
+          <code class="cmd">npx ascii-skill</code>
         </div>
       </section>
 
-      <section id="workflow">
-        <div class="wrap">
-          <div class="rule">why this exists</div>
-          <div class="section-head">
-            <h2>Your agents sketch the art. The page stays fast.</h2>
-            <p>
-              Inspired by product-led landings that let the UI breathe: crisp type, glass nav, and a canvas that responds
-              the instant you move—without fighting the content on top.
-            </p>
-          </div>
-          <div class="feat-grid">
-            <div class="feat">
-              <div
-                class="feat-ascii"
-                data-ascii-skill
-                data-ascii-role="ambient"
-                data-ascii-turbo="true"
-                data-ascii-3d="false"
-                data-ascii-density="high"
-                data-ascii-cell-size="5"
-              ></div>
-              <div class="feat-num">01 — bespoke</div>
-              <h3>Context-first glyphs</h3>
-              <p>Frames, ramps, and motifs generated for <em>this</em> surface—not clipart dragged from elsewhere.</p>
-            </div>
-            <div class="feat">
-              <div
-                class="feat-ascii"
-                data-ascii-skill
-                data-ascii-role="ambient"
-                data-ascii-turbo="true"
-                data-ascii-3d="false"
-                data-ascii-density="high"
-                data-ascii-cell-size="5"
-              ></div>
-              <div class="feat-num">02 — tactile</div>
-              <h3>Turbo responsiveness</h3>
-              <p>Higher temporal frequency, tighter mouse tracking, and denser ramps when <kbd>data-ascii-turbo</kbd> is on.</p>
-            </div>
-            <div class="feat">
-              <div
-                class="feat-ascii"
-                data-ascii-skill
-                data-ascii-role="ambient"
-                data-ascii-turbo="true"
-                data-ascii-3d="false"
-                data-ascii-density="high"
-                data-ascii-cell-size="5"
-              ></div>
-              <div class="feat-num">03 — layered</div>
-              <h3>Linear layouts, Composio energy</h3>
-              <p>Glass nav, aurora mesh, monospace rails—structure from modern dev-marketing, motion from the field.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div class="block" id="install">
+        <h2>Install</h2>
+        <p>
+          Runs from npm and copies <code>SKILL.md</code>, <code>references/</code>, and <code>assets/</code> into your
+          skill folders. Default targets both
+          <code>.claude/skills</code> (project) and <code>~/.codex/skills</code> (Codex).
+        </p>
+        <p style="margin-top: 2rem">
+          <code class="cmd" style="display: block; width: fit-content">npx ascii-skill</code>
+        </p>
+        <p>
+          <code class="cmd" style="display: block; width: fit-content; margin-top: 0.75rem"
+            >npx ascii-skill install --claude</code
+          >
+          <span style="display: block; margin-top: 0.5rem; font-size: 0.9rem; color: var(--muted)"
+            >Only <code style="background: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; border: 1px solid var(--line)"
+              >./.claude/skills/ascii-skill</code
+            ></span
+          >
+        </p>
+        <p>
+          <code class="cmd" style="display: block; width: fit-content">npx ascii-skill install --codex</code>
+          <span style="display: block; margin-top: 0.5rem; font-size: 0.9rem; color: var(--muted)"
+            >Only <code style="background: #fff; padding: 0.1rem 0.35rem; border-radius: 4px; border: 1px solid var(--line)"
+              >~/.codex/skills/ascii-skill</code
+            ></span
+          >
+        </p>
+        <p>
+          Before publish to npm, install from the repo:
+          <code class="cmd" style="display: block; width: fit-content; margin-top: 0.75rem"
+            >npx github:arjunkshah/ascii-skill</code
+          >
+        </p>
 
-      <section>
-        <div class="wrap">
-          <div class="rule">two modes</div>
-          <div class="split">
-            <div class="card-big">
-              <div
-                class="card-ascii"
-                data-ascii-skill
-                data-ascii-role="feature"
-                data-ascii-turbo="true"
-                data-ascii-density="high"
-                data-ascii-cell-size="8"
-              ></div>
-              <div class="card-in">
-                <h3>for agents</h3>
-                <p class="lead">Read SKILL.md. Emit new ASCII per project.</p>
-                <p>Copy patterns from references—never paste the same banner twice.</p>
-                <a class="link-row" href="https://github.com/arjunkshah/ascii-skill/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer"
-                  >Open SKILL.md →</a
-                >
-              </div>
-            </div>
-            <div class="card-big">
-              <div
-                class="card-ascii"
-                data-ascii-skill
-                data-ascii-role="feature"
-                data-ascii-turbo="true"
-                data-ascii-density="high"
-                data-ascii-cell-size="8"
-              ></div>
-              <div class="card-in">
-                <h3>for runtime</h3>
-                <p class="lead">Drop ascii-skill.js when motion earns its place.</p>
-                <p>Turbo + high-density charset for landing heroes; ambient tiles stay subtle by design.</p>
-                <a class="link-row" href="https://github.com/arjunkshah/ascii-skill/blob/main/assets/ascii-skill.js" target="_blank" rel="noopener noreferrer"
-                  >View source →</a
-                >
-              </div>
-            </div>
-          </div>
+        <div class="links">
+          <a href="https://github.com/arjunkshah/ascii-skill/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer"
+            >Read SKILL.md</a
+          >
+          <a
+            href="https://github.com/arjunkshah/ascii-skill/raw/main/assets/ascii-skill.js"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Raw ascii-skill.js</a
+          >
         </div>
-      </section>
+      </div>
+    </main>
 
-      <section id="install">
-        <div class="wrap">
-          <div class="rule">zero to running</div>
-          <div class="section-head">
-            <h2>Install in your agent, wire in your app.</h2>
-            <p>Clone for this demo page, or cherry-pick the files you need.</p>
-          </div>
-          <div class="term">
-            <div class="term-bar">terminal</div>
-            <pre id="install-pre"></pre>
-          </div>
-          <div class="cta-band" style="margin-top: 2rem">
-            <h2>Ship the $ascii workflow</h2>
-            <p>Fork the repo, tune tokens to your brand, and let the canvas ride under your real components.</p>
-            <div class="cta-actions">
-              <a class="btn btn-primary" href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer"
-                >Star on GitHub</a
-              >
-              <a class="btn btn-ghost" href="https://github.com/arjunkshah/ascii-skill/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer"
-                >Download ZIP</a
-              >
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer>
-        <div class="wrap foot-row">
-          <span><span class="logo-mark" style="font-size: 0.85rem">$ascii</span> skill · MIT</span>
-          <a href="https://github.com/arjunkshah/ascii-skill" target="_blank" rel="noopener noreferrer">github.com/arjunkshah/ascii-skill</a>
-        </div>
-      </footer>
-    </div>
+    <footer>MIT · ascii-skill</footer>
 
     <script src="./assets/ascii-skill.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         AsciiSkill.initAll();
-
-        var pre = document.getElementById("install-pre");
-        var lines = [
-          '<span class="m"># Agent: copy SKILL.md + references/ into your skills path</span>',
-          '<span class="m"># ~/.codex/skills/ascii-skill/  ·  .claude/skills/ascii-skill/</span>',
-          "",
-          '<span class="c">git clone https://github.com/arjunkshah/ascii-skill.git</span>',
-          '<span class="c">cd ascii-skill && python3 -m http.server 4173</span>',
-          '<span class="m"># open http://localhost:4173</span>',
-          "",
-          '<span class="m">&lt;!-- Fast, mouse-hungry field (landing-style) --&gt;</span>',
-          '<span class="c">&lt;div</span>',
-          '  <span class="c">data-ascii-skill</span>',
-          '  <span class="c">data-ascii-role="hero"</span>',
-          '  <span class="c">data-ascii-turbo="true"</span>',
-          '  <span class="c">data-ascii-density="high"&gt;</span>',
-          '<span class="c">&lt;/div&gt;</span>',
-          "",
-          '<span class="m">&lt;script src="./assets/ascii-skill.js" defer&gt;&lt;/script&gt;</span>',
-          '<span class="m">&lt;script&gt;document.addEventListener("DOMContentLoaded", () =&gt; AsciiSkill.initAll());&lt;/script&gt;</span>',
-        ];
-        pre.innerHTML = lines.join("\n");
       });
     </script>
   </body>

@@ -48,6 +48,7 @@ When you choose a **live** field instead of or behind static art:
 | `data-ascii-3d="false"` | Disable tilt (use on ambient) |
 | `data-ascii-turbo="true"` | Faster motion, tighter cursor follow, stronger waves (heroes / demos) |
 | `data-ascii-density="high"` | Wider shading charset (`░▒▓` style ramp) for richer motion reads |
+| `data-ascii-style="minimal"` | Sparse dots, slow motion, large cells, no 3D — quiet backgrounds |
 
 Theme hooks on the same element: `--ascii-fg`, `--ascii-accent`, `--ascii-opacity`, `--ascii-font`.
 
