@@ -37,6 +37,7 @@ Use **only** when a **fluid, cursor-reactive** ASCII *field* (not a fixed `<pre>
 - Copy `assets/ascii-skill.js`, add `data-ascii-skill`, call `AsciiSkill.initAll()` after load (see `references/patterns.md`).
 - Still set **custom** CSS variables on the host so the field matches **this** theme.
 - **Ambient** tiles: `data-ascii-role="ambient"`, low `--ascii-opacity`, `data-ascii-3d="false"`.
+- **Turbo / density** (optional): `data-ascii-turbo="true"` for faster drift + snappier cursor tracking + stronger waves; `data-ascii-density="high"` for a wider shading charset. Use sparingly (heroes, demos)—not for quiet cards unless explicitly requested.
 
 The script does **not** replace authoring; it’s one technique for motion + density. Static bespoke ASCII is often the right answer.
 

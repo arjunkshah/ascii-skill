@@ -7,6 +7,7 @@
   "use strict";
 
   var DEFAULT_CHARSET = " .·-:+*=%@#";
+  var HIGH_RES_CHARSET = " ··░░▒▒▓▓██▀▄";
 
   function hash2(ix, iy, seed) {
     var n =
@@ -24,16 +25,6 @@
     return v || fallback;
   }
 
-  /**
-   * @typedef {Object} AsciiSkillOptions
-   * @property {'hero'|'feature'|'ambient'} [role='feature']
-   * @property {string} [charset]
-   * @property {number} [cellSize]
-   * @property {boolean} [followMouse=true]
-   * @property {boolean} [perspective3d=true] — hero/feature only
-   * @property {boolean} [autoStart=true]
-   */
-
   function AsciiSkill(root, options) {
     if (!(root instanceof HTMLElement)) throw new TypeError("AsciiSkill: root must be an HTMLElement");
     this.root = root;
@@ -45,6 +36,7 @@
         followMouse: true,
         perspective3d: true,
         autoStart: true,
+        turbo: false,
       },
       options || {}
     );
@@ -59,6 +51,7 @@
       height: "100%",
       display: "block",
       pointerEvents: "none",
+      willChange: "transform",
     });
 
     var cs = getComputedStyle(root);
@@ -89,6 +82,7 @@
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
       this.options.perspective3d = false;
+      this.options.turbo = false;
       this._reducedMotion = true;
     }
 
@@ -110,6 +104,25 @@
     this._cell = this.options.cellSize;
   };
 
+  AsciiSkill.prototype._mouseSnap = function () {
+    if (this._reducedMotion) return 0.08;
+    var role = this.options.role;
+    if (this.options.turbo && role === "hero") return 0.52;
+    if (this.options.turbo) return 0.38;
+    if (role === "hero") return 0.22;
+    if (role === "ambient") return 0.18;
+    return 0.14;
+  };
+
+  AsciiSkill.prototype._timeBoost = function () {
+    if (this._reducedMotion) return 0.22;
+    var role = this.options.role;
+    var base =
+      role === "ambient" ? 0.55 : role === "hero" ? 2.35 : 1.35;
+    if (this.options.turbo) base *= role === "hero" ? 2.15 : 1.65;
+    return base;
+  };
+
   AsciiSkill.prototype._onMove = function (e) {
     if (!this.options.followMouse) return;
     var rect = this.root.getBoundingClientRect();
@@ -125,7 +138,8 @@
   };
 
   AsciiSkill.prototype._layout = function () {
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var cap = this.options.turbo ? 2.25 : 2;
+    var dpr = Math.min(window.devicePixelRatio || 1, cap);
     var w = this.root.clientWidth;
     var h = this.root.clientHeight;
     if (w < 2 || h < 2) return;
@@ -139,7 +153,6 @@
 
   AsciiSkill.prototype._palette = function () {
     var fg = readCssVar(this.root, "--ascii-fg", "");
-    var bg = readCssVar(this.root, "--ascii-bg", "");
     var accent = readCssVar(this.root, "--ascii-accent", "");
     var opacity = parseFloat(readCssVar(this.root, "--ascii-opacity", "0.85")) || 0.85;
     if (this.options.role === "ambient") {
@@ -147,9 +160,8 @@
     }
     var s = getComputedStyle(this.root);
     if (!fg) fg = s.color || "#e8e4dc";
-    if (!bg) bg = s.backgroundColor || "transparent";
     if (!accent) accent = fg;
-    return { fg: fg, bg: bg, accent: accent, opacity: opacity };
+    return { fg: fg, accent: accent, opacity: opacity };
   };
 
   AsciiSkill.prototype._tick = function () {
@@ -163,29 +175,30 @@
     }
 
     var role = this.options.role;
-    var smooth = role === "ambient" ? 0.04 : role === "hero" ? 0.12 : 0.08;
-    this._mouse.x = lerp(this._mouse.x, this._mouse.tx, smooth);
-    this._mouse.y = lerp(this._mouse.y, this._mouse.ty, smooth);
+    var snap = this._mouseSnap();
+    this._mouse.x = lerp(this._mouse.x, this._mouse.tx, snap);
+    this._mouse.y = lerp(this._mouse.y, this._mouse.ty, snap);
 
     var pal = this._palette();
     var ch = this.options.charset;
     var mx = this._mouse.x;
     var my = this._mouse.y;
+    var turbo = this.options.turbo;
 
-    var pace = this._reducedMotion ? 0.12 : 1;
-    this._time +=
-      (role === "ambient" ? 0.35 : role === "hero" ? 1.15 : 0.75) * pace;
+    this._time += this._timeBoost();
     var t = this._time * 0.001;
+    var tw = turbo ? 1.75 : 1;
 
     ctx.clearRect(0, 0, w, h);
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     ctx.font =
-      Math.max(8, this._cell - 1) +
+      Math.max(7, this._cell - (turbo ? 1 : 0)) +
       "px " +
       (readCssVar(this.root, "--ascii-font", "ui-monospace, monospace") || "ui-monospace, monospace");
 
-    var mouseWeight = role === "ambient" ? 0.35 : role === "hero" ? 1.25 : 0.85;
+    var mouseWeight =
+      role === "ambient" ? (turbo ? 0.55 : 0.35) : role === "hero" ? (turbo ? 1.65 : 1.25) : 1;
 
     for (var iy = 0; iy < this._rows; iy++) {
       for (var ix = 0; ix < this._cols; ix++) {
@@ -194,17 +207,27 @@
         var dx = nx - mx;
         var dy = ny - my;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var glow = Math.exp(-dist * (5.5 - mouseWeight * 1.5)) * mouseWeight;
+        var glow = Math.exp(-dist * (turbo ? 4.2 : 5.5 - mouseWeight * 1.2)) * mouseWeight;
 
-        var n1 = hash2(ix, iy, Math.floor(this._time * 0.02));
+        var n1 = hash2(ix, iy, Math.floor(this._time * (turbo ? 0.08 : 0.02)));
         var wave =
-          Math.sin(t * 3 + nx * 6 + ny * 5) * 0.5 +
-          Math.sin(t * 2.1 + nx * 12) * 0.25;
-        var base = n1 * 0.55 + 0.25 + wave * 0.2 + glow * (role === "hero" ? 0.55 : 0.35);
+          Math.sin(t * (8 + tw * 5) * tw + nx * (11 + tw * 5) + ny * (9 + tw * 4)) * 0.52 +
+          Math.sin(t * (5.2 + tw * 3) + nx * (18 + tw * 8)) * 0.28 +
+          Math.sin(t * (14 * tw) - dist * (22 * tw)) * (turbo ? 0.18 : 0.06);
 
-        if (role === "hero") {
-          var tilt = (mx - 0.5) * 0.4 * (1 - dist);
-          base += tilt * 0.15;
+        var flow =
+          Math.sin(t * 11 * tw + (nx + mx) * 14 + (ny - my) * 14) * (turbo ? 0.12 : 0.04);
+
+        var base =
+          n1 * 0.48 +
+          0.22 +
+          wave * 0.28 +
+          flow +
+          glow * (role === "hero" ? (turbo ? 0.72 : 0.55) : 0.35);
+
+        if (role === "hero" || turbo) {
+          base += (mx - 0.5) * 0.22 * (1 - dist) * (turbo ? 1.2 : 0.7);
+          base += (my - 0.5) * 0.12 * (1 - dist) * (turbo ? 1.2 : 0.7);
         }
 
         var idx = Math.floor(Math.min(ch.length - 1, Math.max(0, base * ch.length)));
@@ -213,24 +236,30 @@
         var ox = ix * this._cell + this._cell * 0.5;
         var oy = iy * this._cell + this._cell * 0.5;
 
-        if (role === "hero" && glow > 0.35) {
+        var glowThresh = turbo ? 0.28 : 0.35;
+        if ((role === "hero" || turbo) && glow > glowThresh) {
           ctx.fillStyle = pal.accent;
-          ctx.globalAlpha = pal.opacity * lerp(0.35, 1, glow);
+          ctx.globalAlpha = pal.opacity * lerp(0.4, 1, glow);
         } else {
           ctx.fillStyle = pal.fg;
-          ctx.globalAlpha = pal.opacity * lerp(0.2, 0.95, base);
+          ctx.globalAlpha = pal.opacity * lerp(0.15, 0.98, Math.min(1, base));
         }
         ctx.fillText(char, ox, oy);
       }
     }
 
     if (this.options.perspective3d && (role === "hero" || role === "feature")) {
-      var rx = (my - 0.5) * (role === "hero" ? -6 : -3.5);
-      var ry = (mx - 0.5) * (role === "hero" ? 8 : 4.5);
+      var mag = turbo ? 1.35 : 1;
+      var rx = (my - 0.5) * (role === "hero" ? -7.5 : -4) * mag;
+      var ry = (mx - 0.5) * (role === "hero" ? 10 : 5) * mag;
       this._canvas.style.transform =
-        "perspective(900px) rotateX(" + rx.toFixed(3) + "deg) rotateY(" + ry.toFixed(3) + "deg)";
+        "perspective(760px) rotateX(" +
+        rx.toFixed(3) +
+        "deg) rotateY(" +
+        ry.toFixed(3) +
+        "deg) translateZ(0)";
     } else {
-      this._canvas.style.transform = "none";
+      this._canvas.style.transform = "translateZ(0)";
     }
 
     this._raf = requestAnimationFrame(this._tick);
@@ -247,7 +276,7 @@
       window.addEventListener("resize", this._layout.bind(this));
     }
     if (this.options.followMouse) {
-      this.root.addEventListener("mousemove", this._onMove);
+      this.root.addEventListener("mousemove", this._onMove, { passive: true });
       this.root.addEventListener("mouseleave", this._onLeave);
     }
     this._raf = requestAnimationFrame(this._tick);
@@ -281,12 +310,16 @@
       if (el._asciiSkillInstance) continue;
       var role = el.getAttribute("data-ascii-role") || "feature";
       var cell = el.getAttribute("data-ascii-cell-size");
-      var inst = new AsciiSkill(el, {
+      var highRes = el.getAttribute("data-ascii-density") === "high";
+      var opts = {
         role: role,
         cellSize: cell ? parseInt(cell, 10) : null,
         followMouse: el.getAttribute("data-ascii-follow") !== "false",
         perspective3d: el.getAttribute("data-ascii-3d") !== "false",
-      });
+        turbo: el.getAttribute("data-ascii-turbo") === "true",
+      };
+      if (highRes) opts.charset = HIGH_RES_CHARSET;
+      var inst = new AsciiSkill(el, opts);
       el._asciiSkillInstance = inst;
       out.push(inst);
     }
