@@ -754,13 +754,14 @@
             "# Clone the skill + site\n" +
             "git clone https://github.com/arjunkshah/ascii-skill.git\n" +
             "cd ascii-skill && open index.html\n\n" +
-            "# Agent install (copy SKILL.md + assets into your skills folder)\n" +
-            "# Codex default: ~/.codex/skills/ascii-skill/\n" +
-            "# Claude Code: project .claude/skills/ascii-skill/ or user skills path\n\n" +
-            "<script src=\"/assets/ascii-skill.js\" defer><\\/script>\n" +
+            "# Agent install (copy SKILL.md + assets/ into your agent skills directory)\n" +
+            "# Examples: ~/.codex/skills/ascii-skill/ · .claude/skills/ascii-skill/\n\n" +
+            "<script src=\"./assets/ascii-skill.js\" defer><\\/script>\n" +
             "<script defer>\n" +
             "  document.addEventListener('DOMContentLoaded', () => AsciiSkill.initAll());\n" +
-            "<\\/script>";
+            "<\\/script>\n\n" +
+            "# Or hotlink the published file (pin a commit SHA in production):\n" +
+            "# https://github.com/arjunkshah/ascii-skill/raw/main/assets/ascii-skill.js";
           document.getElementById("installSnippet").textContent = raw;
         });
       })();
