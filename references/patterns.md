@@ -1,6 +1,6 @@
 # ASCII skill — authoring reference
 
-Use this when you need ideas or technical guardrails while **generating new** ASCII for the task at hand.
+**Characters in text** — Depth, “3D,” and shading live in the **glyph grid** (what you output), not in 3D-transformed cards or generic UI stacks.
 
 ## Layout roles (calibrate complexity)
 
@@ -20,9 +20,10 @@ Use this when you need ideas or technical guardrails while **generating new** AS
 
 ## Implementation
 
-- **`<pre>`** — Best for fixed art; set exact `font-family` stack and `font-size`; avoid accidental proportional fonts.
-- **Overflow** — `overflow-x: auto` on narrow viewports; consider `@media` to simplify or hide ornate frames on small screens.
-- **Color** — Tie to CSS vars: `color: color-mix(in oklab, var(--foreground) 55%, transparent);` for quiet fills.
+- **`<pre>`** — Fixed art lives here; match `font-family` (mono stack) and `font-size`; no accidental proportional fonts.
+- **Responsive** — `overflow-x: auto`; on small widths, fewer lines, thinner frames, or a lighter motif so it doesn’t dominate.
+- **Color** — CSS vars / `color-mix` for quiet fills; keep contrast usable.
+- **3D on request** — In static art: stepped ramps, facet outlines, or block stacks **made of characters**. That is not the same as `data-ascii-3d` on the canvas helper (field tilt only).
 
 ## Generative mindset (examples are *patterns*, not assets)
 
@@ -45,7 +46,7 @@ When you choose a **live** field instead of or behind static art:
 | `data-ascii-skill` | Activate on this container |
 | `data-ascii-role` | `hero` \| `feature` \| `ambient` |
 | `data-ascii-cell-size` | Optional number |
-| `data-ascii-3d="false"` | Disable tilt (use on ambient) |
+| `data-ascii-3d="false"` | Disable tilt on the **live field** (not “3D ASCII art” in `<pre>`) |
 | `data-ascii-turbo="true"` | Faster motion, tighter cursor follow, stronger waves (heroes / demos) |
 | `data-ascii-density="high"` | Wider shading charset (`░▒▓` style ramp) for richer motion reads |
 | `data-ascii-style="minimal"` | Sparse dots, slow motion, large cells, no 3D — quiet backgrounds |

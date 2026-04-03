@@ -1,7 +1,7 @@
 {
   "name": "ascii-skill",
   "private": true,
-  "description": "Agent skill for $ascii — install from GitHub via: npx skills add https://github.com/arjunkshah/ascii-skill",
+  "description": "Agent skill ($ascii): character-based monospace art—clean, responsive; optional live field in assets/.",
   "license": "MIT",
   "repository": {
     "type": "git",
