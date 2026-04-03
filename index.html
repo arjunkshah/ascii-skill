@@ -135,30 +135,11 @@
         position: absolute;
         inset: 0;
         z-index: 0;
-        /* Full ramp + blocks (high-density), not minimal dot field */
+        /* Default symbol ramp ( .·-:+*=%@# ), not Unicode block fills */
         --ascii-fg: rgba(17, 17, 17, 0.13);
         --ascii-accent: rgba(17, 17, 17, 0.22);
         --ascii-opacity: 1;
         --ascii-font: ui-monospace, "SF Mono", Menlo, monospace;
-      }
-
-      .hero-frame {
-        position: absolute;
-        left: clamp(1rem, 3vw, 2rem);
-        right: clamp(1rem, 3vw, 2rem);
-        top: calc(var(--nav-h) + clamp(1rem, 3vw, 1.75rem));
-        bottom: clamp(1rem, 3vw, 2rem);
-        margin: 0;
-        padding: 0;
-        font-family: ui-monospace, "SF Mono", Menlo, monospace;
-        font-size: clamp(7px, 0.85vw, 10px);
-        line-height: 1;
-        letter-spacing: 0;
-        color: rgba(17, 17, 17, 0.32);
-        pointer-events: none;
-        z-index: 2;
-        white-space: pre;
-        overflow: hidden;
       }
 
       .hero-inner {
@@ -551,11 +532,9 @@
           class="hero-ascii"
           data-ascii-skill
           data-ascii-role="hero"
-          data-ascii-density="high"
-          data-ascii-cell-size="11"
+          data-ascii-cell-size="12"
           data-ascii-3d="false"
         ></div>
-        <pre class="hero-frame" id="heroFrame" aria-hidden="true"></pre>
         <div class="hero-inner">
           <h1>ASCII for the interface.</h1>
           <p class="lede">
@@ -588,12 +567,11 @@
                     "
                     data-ascii-skill
                     data-ascii-role="hero"
-                    data-ascii-density="high"
                     data-ascii-cell-size="10"
                     data-ascii-3d="false"
                   ></div>
                   <div class="demo-copy" style="position: relative; z-index: 1">
-                    <strong>With $ascii</strong> — blocks &amp; ramp from the canvas helper.
+                    <strong>With $ascii</strong> — character field from the canvas helper.
                   </div>
                 </div>
               </div>
@@ -616,12 +594,11 @@
                     "
                     data-ascii-skill
                     data-ascii-role="ambient"
-                    data-ascii-density="high"
                     data-ascii-cell-size="7"
                     data-ascii-3d="false"
                   ></div>
                   <div class="demo-copy" style="position: relative; z-index: 1">
-                    <strong>Quiet layer</strong> — same charset, lower weight.
+                    <strong>Quiet layer</strong> — same symbols, lower weight.
                   </div>
                 </div>
               </div>
@@ -644,7 +621,6 @@
                 class="bento-ascii"
                 data-ascii-skill
                 data-ascii-role="ambient"
-                data-ascii-density="high"
                 data-ascii-cell-size="6"
                 data-ascii-3d="false"
               ></div>
@@ -656,19 +632,17 @@
                 class="bento-ascii"
                 data-ascii-skill
                 data-ascii-role="ambient"
-                data-ascii-density="high"
                 data-ascii-cell-size="6"
                 data-ascii-3d="false"
               ></div>
               <h3>Ramps</h3>
-              <p>High-density charset shows █▓▒░-style motion—not only punctuation.</p>
+              <p>Default ramp uses readable symbols—<code style="font-size: 0.85em"> .·-:+*=%@#</code>—not block fills.</p>
             </div>
             <div class="cell">
               <div
                 class="bento-ascii"
                 data-ascii-skill
                 data-ascii-role="ambient"
-                data-ascii-density="high"
                 data-ascii-cell-size="6"
                 data-ascii-3d="false"
               ></div>
@@ -684,7 +658,6 @@
                 class="bento-ascii spice"
                 data-ascii-skill
                 data-ascii-role="feature"
-                data-ascii-density="high"
                 data-ascii-cell-size="9"
                 data-ascii-3d="false"
               ></div>
@@ -720,7 +693,7 @@
               <div class="step-num">3</div>
               <div>
                 <h3>Runtime</h3>
-                <p>Add <code style="font-size: 0.9em">ascii-skill.js</code> when you want mouse-aware fields—ramps, blocks, motion.</p>
+                <p>Add <code style="font-size: 0.9em">ascii-skill.js</code> when you want mouse-aware fields—symbol ramps and motion.</p>
               </div>
             </div>
           </div>
@@ -755,30 +728,6 @@
     <script src="./assets/ascii-skill.js"></script>
     <script>
       (function () {
-        function buildFrame(el, horiz, vert) {
-          var H = "─",
-            V = "│",
-            TL = "┌",
-            TR = "┐",
-            BL = "└",
-            BR = "┘";
-          var rowEdge = TL + H.repeat(Math.max(horiz - 2, 1)) + TR;
-          var rowMid = V + " ".repeat(Math.max(horiz - 2, 1)) + V;
-          var rowBot = BL + H.repeat(Math.max(horiz - 2, 1)) + BR;
-          var lines = [rowEdge];
-          for (var i = 0; i < vert - 2; i++) lines.push(rowMid);
-          lines.push(rowBot);
-          el.textContent = lines.join("\n");
-        }
-
-        function sizeHeroFrame() {
-          var el = document.getElementById("heroFrame");
-          if (!el) return;
-          var w = Math.max(24, Math.min(120, Math.floor(el.clientWidth / 7)));
-          var h = Math.max(10, Math.min(42, Math.floor(el.clientHeight / 12)));
-          buildFrame(el, w, h);
-        }
-
         function setupCompare(rootId, sliderId) {
           var root = document.getElementById(rootId);
           var slider = document.getElementById(sliderId);
@@ -801,13 +750,10 @@
           });
         }
 
-        window.addEventListener("resize", sizeHeroFrame);
-
         document.addEventListener("DOMContentLoaded", function () {
           AsciiSkill.initAll();
           setupCompare("cmpHero", "sliderHero");
           setupCompare("cmpAmbient", "sliderAmbient");
-          requestAnimationFrame(sizeHeroFrame);
         });
       })();
     </script>
